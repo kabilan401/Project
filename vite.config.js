@@ -4,8 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/Project/', // Required for GitHub Pages 24/7 deployment
   server: {
-    host: true, // Listens on 0.0.0.0 for Public Network IP & Android devices
+    host: true,
     port: 3000
   }
 })
