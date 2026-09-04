@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import { PlusCircle, Upload, Eye, CheckCircle2, ShieldCheck, Sparkles, Image as ImageIcon, X } from 'lucide-react';
+import { PlusCircle, Upload, Eye, CheckCircle2, ShieldCheck, Sparkles, Image as ImageIcon, X, FolderPlus } from 'lucide-react';
 import { CATEGORIES } from '../data/mockData';
 import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,7 @@ import { Modal } from '../components/Modal';
 
 export const SellItemPage = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
   const { addProduct } = useProducts();
   const { user } = useAuth();
   const { addToast } = useToast();
@@ -23,7 +24,7 @@ export const SellItemPage = () => {
     originalPrice: '',
     condition: 'Like New',
     description: '',
-    college: user?.college || 'IIT Delhi',
+    college: user?.college || 'University Campus',
     department: user?.department || 'Computer Science & Engg',
     location: user?.location || 'Main Hostel Block B',
     contactPreference: 'Both Chat & Phone',
@@ -34,11 +35,13 @@ export const SellItemPage = () => {
   const [errors, setErrors] = useState({});
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const defaultSampleImages = [
-    'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48a?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80'
+  const sampleLibraryImages = [
+    { label: 'Engineering Book', url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Calculator', url: 'https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48a?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Laptop', url: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Bicycle', url: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Headphones', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Backpack', url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80' }
   ];
 
   const handleChange = (e) => {
@@ -49,6 +52,37 @@ export const SellItemPage = () => {
     }
   };
 
+  // Open device photo gallery / file manager
+  const handleOpenDeviceGallery = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Read selected image files from photo library as Base64 Data URLs
+  const handleFileUpload = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    files.forEach((file) => {
+      if (!file.type.startsWith('image/')) {
+        addToast('Please select a valid image file', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        const base64Data = uploadEvent.target.result;
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, base64Data]
+        }));
+        addToast('Image uploaded from device library!', 'success');
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleAddImageUrl = () => {
     if (formData.imageUrlInput.trim()) {
       setFormData((prev) => ({
@@ -56,6 +90,7 @@ export const SellItemPage = () => {
         images: [...prev.images, prev.imageUrlInput.trim()],
         imageUrlInput: ''
       }));
+      addToast('Image URL added!', 'success');
     }
   };
 
@@ -72,6 +107,7 @@ export const SellItemPage = () => {
         ...prev,
         images: [...prev.images, imgUrl]
       }));
+      addToast('Selected from sample library', 'info');
     }
   };
 
@@ -95,7 +131,7 @@ export const SellItemPage = () => {
       return;
     }
 
-    const finalImages = formData.images.length > 0 ? formData.images : [defaultSampleImages[0]];
+    const finalImages = formData.images.length > 0 ? formData.images : [sampleLibraryImages[0].url];
 
     const newProd = addProduct(
       {
@@ -141,7 +177,7 @@ export const SellItemPage = () => {
           <Sparkles size={16} /> Campus Listing Wizard
         </div>
         <h1 className="page-title">Sell an Item on CampusMart</h1>
-        <p className="page-subtitle">List your books, electronics, calculators, or hostel items to peers in 60 seconds</p>
+        <p className="page-subtitle">Upload photos from your device gallery and list your items to peers in 60 seconds</p>
       </div>
 
       <form onSubmit={handlePublish} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '24px', padding: '2rem', boxShadow: 'var(--shadow-md)' }}>
@@ -217,20 +253,67 @@ export const SellItemPage = () => {
             name="description"
             className={`form-control ${errors.description ? 'error' : ''}`}
             rows="4"
-            placeholder="Describe the condition, key features, reason for selling, and any included accessories..."
+            placeholder="Describe the condition, key features, reason for selling, and included accessories..."
             value={formData.description}
             onChange={handleChange}
           />
           {errors.description && <span className="error-text">{errors.description}</span>}
         </div>
 
-        {/* Product Images */}
+        {/* Product Images - Device Gallery Upload & URL Picker */}
         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '2rem 0 1.25rem', color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.5rem' }}>
-          2. Product Images
+          2. Product Images & Device Gallery
         </h3>
 
+        {/* Hidden File Input for Device Photo Library */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          accept="image/*"
+          multiple
+          style={{ display: 'none' }}
+        />
+
+        {/* Primary Upload Zone: Photo Library */}
+        <div
+          onClick={handleOpenDeviceGallery}
+          style={{
+            border: '2px dashed #6366f1',
+            backgroundColor: '#eef2ff',
+            borderRadius: '16px',
+            padding: '2rem 1.5rem',
+            textAlign: 'center',
+            cursor: 'pointer',
+            marginBottom: '1.5rem',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <div style={{
+            width: '54px',
+            height: '54px',
+            borderRadius: '50%',
+            backgroundColor: '#ffffff',
+            color: '#4f46e5',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            margin: '0 auto 0.75rem',
+            boxShadow: 'var(--shadow-sm)'
+          }}>
+            <FolderPlus size={26} />
+          </div>
+          <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.35rem' }}>
+            Choose Photos from Device Library / Gallery
+          </h4>
+          <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+            Tap to open Android Gallery, Camera Roll, or File Manager (JPEG, PNG, WEBP)
+          </p>
+        </div>
+
+        {/* Option B: Enter Web Image URL */}
         <div className="form-group">
-          <label className="form-label">Add Product Image URL</label>
+          <label className="form-label">Or Add Image via Web URL</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <input
               type="url"
@@ -240,42 +323,72 @@ export const SellItemPage = () => {
               onChange={(e) => setFormData((prev) => ({ ...prev, imageUrlInput: e.target.value }))}
             />
             <button type="button" className="btn btn-outline" onClick={handleAddImageUrl}>
-              Add Image
+              Add URL
             </button>
           </div>
         </div>
 
-        {/* Sample Images Quick Pick */}
-        <div style={{ marginBottom: '1.25rem' }}>
-          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>Or select sample product image:</span>
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.35rem', overflowX: 'auto' }}>
-            {defaultSampleImages.map((img, idx) => (
-              <img
+        {/* Option C: Sample Library Quick Select */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>Or pick from Sample Image Library:</span>
+          <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.4rem', overflowX: 'auto', paddingBottom: '0.35rem' }}>
+            {sampleLibraryImages.map((sample, idx) => (
+              <div
                 key={idx}
-                src={img}
-                alt="Sample product preview"
-                onClick={() => handleAddSampleImage(img)}
-                style={{ width: '56px', height: '56px', borderRadius: '8px', objectFit: 'cover', cursor: 'pointer', border: formData.images.includes(img) ? '2px solid #4f46e5' : '1px solid #e2e8f0' }}
-              />
+                onClick={() => handleAddSampleImage(sample.url)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                <img
+                  src={sample.url}
+                  alt={sample.label}
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '10px',
+                    objectFit: 'cover',
+                    border: formData.images.includes(sample.url) ? '2.5px solid #4f46e5' : '1px solid #e2e8f0'
+                  }}
+                />
+                <span style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '0.2rem', whiteSpace: 'nowrap' }}>{sample.label}</span>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* Selected Images Previews */}
+        {/* Selected Image Previews Gallery */}
         {formData.images.length > 0 && (
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-            {formData.images.map((img, i) => (
-              <div key={i} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '10px', overflow: 'hidden', border: '1px solid #cbd5e1' }}>
-                <img src={img} alt={`upload ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(i)}
-                  style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(239,68,68,0.9)', color: '#ffffff', borderRadius: '50%', padding: '2px' }}
-                >
-                  <X size={12} />
-                </button>
-              </div>
-            ))}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label className="form-label" style={{ marginBottom: '0.5rem' }}>Selected Images ({formData.images.length}):</label>
+            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
+              {formData.images.map((img, i) => (
+                <div key={i} style={{ position: 'relative', width: '90px', height: '90px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #6366f1', boxShadow: 'var(--shadow-sm)' }}>
+                  <img src={img} alt={`upload ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(i)}
+                    style={{
+                      position: 'absolute',
+                      top: '4px',
+                      right: '4px',
+                      background: 'rgba(239, 68, 68, 0.9)',
+                      color: '#ffffff',
+                      borderRadius: '50%',
+                      padding: '3px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justify: 'center'
+                    }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -360,7 +473,7 @@ export const SellItemPage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ width: '100%', height: '220px', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
             <img
-              src={formData.images[0] || defaultSampleImages[0]}
+              src={formData.images[0] || sampleLibraryImages[0].url}
               alt="Preview"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
