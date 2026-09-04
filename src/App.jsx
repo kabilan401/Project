@@ -57,6 +57,7 @@ export default function App() {
                         <Route path="/product/:id" element={<ProductDetailsPage />} />
                         <Route path="/sell" element={<SellItemPage />} />
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/admin/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route path="/my-listings" element={<MyListingsPage />} />
