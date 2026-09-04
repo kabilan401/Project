@@ -5,8 +5,18 @@ const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(() => {
+    // Clear any legacy mock items from browser local storage to guarantee a fresh website
+    const hasReset = localStorage.getItem('campusmart_fresh_reset_v2');
+    if (!hasReset) {
+      localStorage.removeItem('campusmart_products');
+      localStorage.removeItem('campusmart_wishlist');
+      localStorage.removeItem('campusmart_chats');
+      localStorage.removeItem('campusmart_notifications');
+      localStorage.setItem('campusmart_fresh_reset_v2', 'true');
+      return [];
+    }
     const saved = localStorage.getItem('campusmart_products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
@@ -27,7 +37,7 @@ export const ProductProvider = ({ children }) => {
         'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80'
       ],
       seller: {
-        id: currentUser?.id || 'user-101',
+        id: currentUser?.id || 'user-' + Date.now(),
         name: currentUser?.name || 'Student User',
         avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
         rating: currentUser?.rating || 5.0,
