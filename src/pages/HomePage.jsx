@@ -8,13 +8,8 @@ import {
   ArrowRight, 
   TrendingUp, 
   Clock, 
-  Star, 
-  CheckCircle2, 
-  Users, 
   Sparkles, 
-  MessageSquare, 
-  Handshake, 
-  Lock 
+  PackageX 
 } from 'lucide-react';
 import { CATEGORIES } from '../data/mockData';
 import { useProducts } from '../context/ProductContext';
@@ -54,7 +49,7 @@ export const HomePage = () => {
           maxWidth: '1280px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: '1.2fr 0.8fr',
+          gridTemplateColumns: products.length > 0 ? '1.2fr 0.8fr' : '1fr',
           gap: '3rem',
           alignItems: 'center'
         }}>
@@ -71,7 +66,7 @@ export const HomePage = () => {
               fontWeight: 700,
               marginBottom: '1.25rem'
             }}>
-              <Sparkles size={16} /> Exclusive Peer-to-Peer College Marketplace
+              <Sparkles size={16} /> Fresh Student Campus Marketplace
             </div>
 
             <h1 style={{
@@ -102,7 +97,7 @@ export const HomePage = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search 'B.S. Grewal', 'Casio Calculator', 'Laptop'..."
+                  placeholder="Search books, laptops, cycles, calculators..."
                   value={heroSearch}
                   onChange={(e) => setHeroSearch(e.target.value)}
                   style={{ paddingLeft: '48px', height: '52px', fontSize: '1rem', borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}
@@ -124,39 +119,40 @@ export const HomePage = () => {
           </div>
 
           {/* Hero Visual Card Stack */}
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-            <div style={{
-              width: '100%',
-              maxWidth: '440px',
-              background: '#ffffff',
-              borderRadius: '24px',
-              padding: '1.5rem',
-              boxShadow: '0 25px 50px -12px rgba(79, 70, 229, 0.25)',
-              border: '1px solid #c7d2fe',
-              position: 'relative',
-              zIndex: 2
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Trending on IIT Delhi</span>
-                <span style={{ fontSize: '0.75rem', background: '#d1fae5', color: '#065f46', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>Verified Student</span>
-              </div>
-              
-              <div style={{ width: '100%', height: '200px', borderRadius: '16px', overflow: 'hidden', marginBottom: '1rem' }}>
-                <img src={products[0]?.images[0]} alt="Hero featured product" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>{products[0]?.name}</h3>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div>
-                  <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>₹{products[0]?.price}</span>
-                  <span style={{ fontSize: '0.875rem', color: '#94a3b8', textDecoration: 'line-through', marginLeft: '0.5rem' }}>₹{products[0]?.originalPrice}</span>
+          {products.length > 0 && (
+            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+              <div style={{
+                width: '100%',
+                maxWidth: '440px',
+                background: '#ffffff',
+                borderRadius: '24px',
+                padding: '1.5rem',
+                boxShadow: '0 25px 50px -12px rgba(79, 70, 229, 0.25)',
+                border: '1px solid #c7d2fe',
+                position: 'relative',
+                zIndex: 2
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Featured Item</span>
+                  <span style={{ fontSize: '0.75rem', background: '#d1fae5', color: '#065f46', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '9999px' }}>Verified Student</span>
                 </div>
-                <Link to={`/product/${products[0]?.id}`} className="btn btn-soft btn-sm">
-                  View <ArrowRight size={14} />
-                </Link>
+                
+                <div style={{ width: '100%', height: '200px', borderRadius: '16px', overflow: 'hidden', marginBottom: '1rem' }}>
+                  <img src={products[0]?.images[0]} alt="Hero featured product" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>{products[0]?.name}</h3>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div>
+                    <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>₹{products[0]?.price}</span>
+                  </div>
+                  <Link to={`/product/${products[0]?.id}`} className="btn btn-soft btn-sm">
+                    View <ArrowRight size={14} />
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -188,7 +184,7 @@ export const HomePage = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
           <div>
             <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <Sparkles size={16} /> Curated Picks
+              <Sparkles size={16} /> Campus Listings
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.25rem' }}>Featured Products</h2>
           </div>
@@ -197,11 +193,26 @@ export const HomePage = () => {
           </Link>
         </div>
 
-        <div className="product-grid">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {products.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">
+              <PlusCircle size={36} />
+            </div>
+            <h3 className="empty-title">Campus Marketplace is Fresh & Ready!</h3>
+            <p className="empty-desc">
+              Be the first student to post a book, calculator, laptop, or hostel item on campus today.
+            </p>
+            <Link to="/sell" className="btn btn-primary btn-lg">
+              <PlusCircle size={20} /> Sell First Item Now
+            </Link>
+          </div>
+        ) : (
+          <div className="product-grid">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* How CampusMart Works */}
@@ -251,52 +262,10 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* Recently Added Products */}
-      <section className="page-container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
-          <div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <Clock size={16} /> Fresh Today
-            </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.25rem' }}>Recently Added</h2>
-          </div>
-          <Link to="/marketplace" className="btn btn-soft btn-sm">
-            View All <ArrowRight size={16} />
-          </Link>
-        </div>
-
-        <div className="product-grid">
-          {recentlyAddedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
       {/* Student Safety Section */}
       <div className="page-container">
         <SafetySection />
       </div>
-
-      {/* Popular Products */}
-      <section className="page-container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
-          <div>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <TrendingUp size={16} /> High Demand
-            </span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginTop: '0.25rem' }}>Popular Products</h2>
-          </div>
-          <Link to="/marketplace" className="btn btn-outline btn-sm">
-            Explore Marketplace <ArrowRight size={16} />
-          </Link>
-        </div>
-
-        <div className="product-grid">
-          {popularProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
 
       {/* Call to Action Banner */}
       <section className="page-container" style={{ marginTop: '3rem' }}>

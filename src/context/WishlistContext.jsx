@@ -5,7 +5,7 @@ const WishlistContext = createContext();
 export const WishlistProvider = ({ children }) => {
   const [wishlistIds, setWishlistIds] = useState(() => {
     const saved = localStorage.getItem('campusmart_wishlist');
-    return saved ? JSON.parse(saved) : ['prod-1', 'prod-3', 'prod-7', 'prod-20'];
+    return saved ? JSON.parse(saved) : []; // Fresh clean start
   });
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export const WishlistProvider = ({ children }) => {
 
   const clearWishlist = () => {
     setWishlistIds([]);
+    localStorage.removeItem('campusmart_wishlist');
   };
 
   return (

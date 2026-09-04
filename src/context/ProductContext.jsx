@@ -28,18 +28,18 @@ export const ProductProvider = ({ children }) => {
       ],
       seller: {
         id: currentUser?.id || 'user-101',
-        name: currentUser?.name || 'Rohan Sharma',
-        avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
-        rating: currentUser?.rating || 4.9,
-        reviewsCount: currentUser?.reviewsCount || 10,
-        college: newProdData.college || currentUser?.college || 'IIT Delhi',
-        department: newProdData.department || currentUser?.department || 'Computer Science',
-        year: currentUser?.year || '3rd Year',
+        name: currentUser?.name || 'Student User',
+        avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+        rating: currentUser?.rating || 5.0,
+        reviewsCount: currentUser?.reviewsCount || 0,
+        college: newProdData.college || currentUser?.college || 'University Campus',
+        department: newProdData.department || currentUser?.department || 'General',
+        year: currentUser?.year || '1st Year',
         phone: currentUser?.phone || '+91 98765 43210',
-        email: currentUser?.email || 'rohan.s@iitd.ac.in'
+        email: currentUser?.email || 'student@college.edu'
       },
-      college: newProdData.college || currentUser?.college || 'IIT Delhi',
-      location: newProdData.location || 'Main Campus Hostel',
+      college: newProdData.college || currentUser?.college || 'University Campus',
+      location: newProdData.location || 'Campus Hostel',
       department: newProdData.department || 'General',
       postedDate: 'Just now',
       createdAt: new Date().toISOString(),
@@ -75,6 +75,11 @@ export const ProductProvider = ({ children }) => {
     );
   };
 
+  const clearAllProducts = () => {
+    setProducts([]);
+    localStorage.removeItem('campusmart_products');
+  };
+
   const getProductById = (id) => {
     return products.find((p) => p.id === id);
   };
@@ -87,6 +92,7 @@ export const ProductProvider = ({ children }) => {
       deleteProduct,
       markAsSold,
       markAsActive,
+      clearAllProducts,
       getProductById
     }}>
       {children}
