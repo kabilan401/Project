@@ -10,17 +10,22 @@ import {
   CheckCheck, 
   MapPin, 
   Circle,
-  User
+  User,
+  QrCode
 } from 'lucide-react';
 import { useChat } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
+import { useProducts } from '../context/ProductContext';
+import { PaymentQrModal } from '../components/PaymentQrModal';
 
 export const MessagesPage = () => {
   const { conversations, activeConvId, setActiveConvId, activeConversation, sendMessage } = useChat();
   const { user } = useAuth();
+  const { getProductById } = useProducts();
 
   const [inputMessage, setInputMessage] = useState('');
   const [searchConv, setSearchConv] = useState('');
+  const [qrModalOpen, setQrModalOpen] = useState(false);
 
   const filteredConversations = conversations.filter((c) =>
     c.otherUser.name.toLowerCase().includes(searchConv.toLowerCase()) ||
@@ -175,26 +180,36 @@ export const MessagesPage = () => {
                 </div>
               </div>
 
-              {/* Product Reference Pill */}
-              <Link
-                to={`/product/${activeConversation.productId}`}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.6rem',
-                  backgroundColor: '#f1f5f9',
-                  padding: '0.35rem 0.75rem',
-                  borderRadius: '12px',
-                  fontSize: '0.85rem',
-                  color: '#334155'
-                }}
-              >
-                <img src={activeConversation.productImage} alt="Product" style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'cover' }} />
-                <span style={{ fontWeight: 600, maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {activeConversation.productName}
-                </span>
-                <span style={{ fontWeight: 800, color: '#4f46e5' }}>₹{activeConversation.productPrice}</span>
-              </Link>
+              {/* Product Reference Pill & Payment QR Button */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => setQrModalOpen(true)}
+                  style={{ backgroundColor: '#059669', borderColor: '#059669', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                >
+                  <QrCode size={14} /> Pay Seller QR
+                </button>
+
+                <Link
+                  to={`/product/${activeConversation.productId}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.6rem',
+                    backgroundColor: '#f1f5f9',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '12px',
+                    fontSize: '0.85rem',
+                    color: '#334155'
+                  }}
+                >
+                  <img src={activeConversation.productImage} alt="Product" style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'cover' }} />
+                  <span style={{ fontWeight: 600, maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {activeConversation.productName}
+                  </span>
+                  <span style={{ fontWeight: 800, color: '#4f46e5' }}>₹{activeConversation.productPrice}</span>
+                </Link>
+              </div>
             </div>
 
             {/* Message Bubble Scroll Area */}
@@ -252,6 +267,20 @@ export const MessagesPage = () => {
           </div>
         )}
       </div>
+
+      {/* Payment QR Scanner Modal */}
+      {activeConversation && (
+        <PaymentQrModal
+          isOpen={qrModalOpen}
+          onClose={() => setQrModalOpen(false)}
+          product={getProductById(activeConversation.productId) || {
+            name: activeConversation.productName,
+            price: activeConversation.productPrice,
+            seller: { name: activeConversation.otherUser.name, email: 'seller@college.edu' }
+          }}
+          user={user}
+        />
+      )}
     </div>
   );
 };

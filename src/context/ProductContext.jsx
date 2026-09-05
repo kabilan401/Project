@@ -36,6 +36,8 @@ export const ProductProvider = ({ children }) => {
       images: newProdData.images && newProdData.images.length > 0 ? newProdData.images : [
         'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80'
       ],
+      paymentQrImage: newProdData.paymentQrImage || currentUser?.paymentQrImage || null,
+      upiId: newProdData.upiId || currentUser?.upiId || (currentUser?.phone ? `${currentUser.phone.replace(/[^0-9]/g, '')}@paytm` : 'student@upi'),
       seller: {
         id: currentUser?.id || 'user-' + Date.now(),
         name: currentUser?.name || 'Student User',
@@ -45,7 +47,9 @@ export const ProductProvider = ({ children }) => {
         department: newProdData.department || currentUser?.department || 'General',
         year: currentUser?.year || '1st Year',
         phone: currentUser?.phone || '+91 98765 43210',
-        email: currentUser?.email || 'student@college.edu'
+        email: currentUser?.email || 'student@college.edu',
+        paymentQrImage: currentUser?.paymentQrImage || newProdData.paymentQrImage || null,
+        upiId: currentUser?.upiId || newProdData.upiId || 'student@upi'
       },
       college: newProdData.college || currentUser?.college || 'University Campus',
       location: newProdData.location || 'Campus Hostel',

@@ -28,6 +28,8 @@ export const MyListingsPage = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [editPrice, setEditPrice] = useState('');
   const [editDesc, setEditDesc] = useState('');
+  const [editUpiId, setEditUpiId] = useState('');
+  const [editQrImage, setEditQrImage] = useState('');
 
   const myListings = products.filter((p) => p.seller.id === user?.id || p.seller.name === user?.name);
 
@@ -56,13 +58,17 @@ export const MyListingsPage = () => {
     setEditingProduct(product);
     setEditPrice(product.price);
     setEditDesc(product.description);
+    setEditUpiId(product.upiId || product.seller?.upiId || '');
+    setEditQrImage(product.paymentQrImage || product.seller?.paymentQrImage || '');
   };
 
   const handleSaveEdit = () => {
     if (!editingProduct) return;
     updateProduct(editingProduct.id, {
       price: Number(editPrice),
-      description: editDesc
+      description: editDesc,
+      upiId: editUpiId,
+      paymentQrImage: editQrImage
     });
     addToast('Listing updated successfully!', 'success');
     setEditingProduct(null);
@@ -240,6 +246,16 @@ export const MyListingsPage = () => {
             rows="4"
             value={editDesc}
             onChange={(e) => setEditDesc(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Seller Payment UPI ID (VPA)</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="e.g. name@upi or 9876543210@paytm"
+            value={editUpiId}
+            onChange={(e) => setEditUpiId(e.target.value)}
           />
         </div>
       </Modal>

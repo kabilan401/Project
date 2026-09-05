@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   User, 
@@ -12,7 +12,10 @@ import {
   ShoppingBag, 
   Heart, 
   CheckCircle2, 
-  ShieldCheck 
+  ShieldCheck,
+  QrCode,
+  FolderPlus,
+  X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProducts } from '../context/ProductContext';
@@ -26,6 +29,7 @@ export const ProfilePage = () => {
   const { products } = useProducts();
   const { wishlistIds } = useWishlist();
   const { addToast } = useToast();
+  const qrInputRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState('listings'); // 'listings' | 'sold' | 'saved'
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -36,7 +40,9 @@ export const ProfilePage = () => {
     department: '',
     year: '',
     phone: '',
-    location: ''
+    location: '',
+    upiId: '',
+    paymentQrImage: ''
   });
 
   useEffect(() => {
@@ -47,7 +53,9 @@ export const ProfilePage = () => {
         department: user.department || '',
         year: user.year || '',
         phone: user.phone || '',
-        location: user.location || ''
+        location: user.location || '',
+        upiId: user.upiId || (user.phone ? `${user.phone.replace(/[^0-9]/g, '')}@paytm` : 'student@upi'),
+        paymentQrImage: user.paymentQrImage || ''
       });
     }
   }, [user, editModalOpen]);
@@ -355,6 +363,68 @@ export const ProfilePage = () => {
               onChange={(e) => setEditForm((prev) => ({ ...prev, location: e.target.value }))}
             />
           </div>
+
+          {!isAdmin && (
+            <>
+              <div className="form-group" style={{ borderTop: '1px solid #e2e8f0', paddingTop: '1rem', marginTop: '1rem' }}>
+                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, color: '#4f46e5' }}>
+                  <QrCode size={16} /> Default Seller Payment UPI ID
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. yourname@upi or 9876543210@paytm"
+                  value={editForm.upiId}
+                  onChange={(e) => setEditForm((prev) => ({ ...prev, upiId: e.target.value }))}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Upload Profile Payment QR Code Scanner (Device Gallery)</label>
+                <input
+                  type="file"
+                  ref={qrInputRef}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        setEditForm((prev) => ({ ...prev, paymentQrImage: ev.target.result }));
+                        addToast('Payment QR Code Scanner updated!', 'success');
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    className="btn btn-outline"
+                    onClick={() => qrInputRef.current && qrInputRef.current.click()}
+                  >
+                    <FolderPlus size={16} /> Choose QR Image
+                  </button>
+                  {editForm.paymentQrImage && (
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => setEditForm((prev) => ({ ...prev, paymentQrImage: '' }))}
+                    >
+                      <X size={14} /> Remove QR
+                    </button>
+                  )}
+                </div>
+
+                {editForm.paymentQrImage && (
+                  <div style={{ marginTop: '0.75rem', width: '90px', height: '90px', borderRadius: '12px', border: '2px solid #4f46e5', overflow: 'hidden' }}>
+                    <img src={editForm.paymentQrImage} alt="Payment QR" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </form>
       </Modal>
     </div>

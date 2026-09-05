@@ -15,7 +15,9 @@ import {
   Building, 
   ArrowLeft,
   Eye,
-  User
+  User,
+  QrCode,
+  CreditCard
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -25,6 +27,7 @@ import { useAuth } from '../context/AuthContext';
 import { ProductGallery } from '../components/ProductGallery';
 import { ProductCard } from '../components/ProductCard';
 import { ReportModal } from '../components/ReportModal';
+import { PaymentQrModal } from '../components/PaymentQrModal';
 
 export const ProductDetailsPage = () => {
   const { id } = useParams();
@@ -37,6 +40,7 @@ export const ProductDetailsPage = () => {
 
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [showContactInfo, setShowContactInfo] = useState(false);
+  const [qrModalOpen, setQrModalOpen] = useState(false);
 
   const product = getProductById(id) || products[0];
 
@@ -185,17 +189,71 @@ export const ProductDetailsPage = () => {
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary btn-lg" onClick={handleStartChat} style={{ flex: 1 }}>
-              <MessageSquare size={20} /> Chat with Seller
+          <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => setQrModalOpen(true)}
+              style={{ flex: '1 1 200px', backgroundColor: '#059669', borderColor: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+            >
+              <QrCode size={22} /> Pay via Seller QR Code
+            </button>
+
+            <button className="btn btn-outline btn-lg" onClick={handleStartChat} style={{ flex: '1 1 180px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+              <MessageSquare size={20} /> Chat Seller
             </button>
 
             <button
               className="btn btn-outline btn-lg"
               onClick={() => setShowContactInfo(!showContactInfo)}
-              style={{ backgroundColor: '#ffffff' }}
+              style={{ backgroundColor: '#ffffff', padding: '0 1rem' }}
+              title="Call Seller"
             >
-              <Phone size={20} /> {showContactInfo ? product.seller.phone : 'Contact Seller'}
+              <Phone size={20} /> {showContactInfo ? product.seller.phone : 'Contact Phone'}
+            </button>
+          </div>
+
+          {/* Dedicated Instant Payment Banner */}
+          <div style={{
+            background: 'linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%)',
+            border: '1.5px solid #a7f3d0',
+            borderRadius: '16px',
+            padding: '1rem 1.25rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'space-between',
+            gap: '1rem',
+            boxShadow: 'var(--shadow-sm)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div style={{
+                width: '46px',
+                height: '46px',
+                borderRadius: '12px',
+                backgroundColor: '#059669',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justify: 'center',
+                flexShrink: 0
+              }}>
+                <CreditCard size={24} />
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, color: '#065f46', fontSize: '0.975rem' }}>
+                  Direct UPI Payment QR Scanner Available
+                </div>
+                <div style={{ fontSize: '0.825rem', color: '#047857', marginTop: '0.1rem' }}>
+                  Scan {product.seller.name}'s QR Code to pay ₹{product.price.toLocaleString('en-IN')} instantly!
+                </div>
+              </div>
+            </div>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setQrModalOpen(true)}
+              style={{ backgroundColor: '#047857', borderColor: '#047857', whiteSpace: 'nowrap' }}
+            >
+              <QrCode size={14} /> View QR
             </button>
           </div>
 
@@ -287,6 +345,14 @@ export const ProductDetailsPage = () => {
         isOpen={reportModalOpen}
         onClose={() => setReportModalOpen(false)}
         product={product}
+      />
+
+      {/* Payment QR Modal */}
+      <PaymentQrModal
+        isOpen={qrModalOpen}
+        onClose={() => setQrModalOpen(false)}
+        product={product}
+        user={user}
       />
     </div>
   );

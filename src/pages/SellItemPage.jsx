@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import { PlusCircle, Upload, Eye, CheckCircle2, ShieldCheck, Sparkles, Image as ImageIcon, X, FolderPlus } from 'lucide-react';
+import { PlusCircle, Upload, Eye, CheckCircle2, ShieldCheck, Sparkles, Image as ImageIcon, X, FolderPlus, QrCode } from 'lucide-react';
 import { CATEGORIES } from '../data/mockData';
 import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
@@ -12,6 +12,7 @@ import { Modal } from '../components/Modal';
 export const SellItemPage = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const qrInputRef = useRef(null);
   const { addProduct } = useProducts();
   const { user } = useAuth();
   const { addToast } = useToast();
@@ -29,7 +30,9 @@ export const SellItemPage = () => {
     location: user?.location || 'Main Hostel Block B',
     contactPreference: 'Both Chat & Phone',
     imageUrlInput: '',
-    images: []
+    images: [],
+    upiId: user?.upiId || (user?.phone ? `${user.phone.replace(/[^0-9]/g, '')}@paytm` : 'student@upi'),
+    paymentQrImage: user?.paymentQrImage || ''
   });
 
   const [errors, setErrors] = useState({});
@@ -81,6 +84,24 @@ export const SellItemPage = () => {
       };
       reader.readAsDataURL(file);
     });
+  };
+
+  const handleQrUpload = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      addToast('Please select a valid QR scanner image', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      setFormData((prev) => ({
+        ...prev,
+        paymentQrImage: uploadEvent.target.result
+      }));
+      addToast('Payment QR Scanner uploaded from device gallery!', 'success');
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleAddImageUrl = () => {
@@ -438,13 +459,97 @@ export const SellItemPage = () => {
             {errors.location && <span className="error-text">{errors.location}</span>}
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Contact Preference</label>
-            <select name="contactPreference" className="form-control" value={formData.contactPreference} onChange={handleChange}>
-              <option value="Both Chat & Phone">Both In-App Chat & Phone</option>
-              <option value="In-App Chat Only">In-App Chat Only</option>
-              <option value="Phone Only">Phone Only</option>
-            </select>
+        </div>
+
+        {/* Section 4: Payment QR Scanner Upload */}
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '2rem 0 1.25rem', color: '#0f172a', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <QrCode size={20} color="#4f46e5" /> 4. Seller Payment QR Code Scanner (For Buyer Direct Payment)
+        </h3>
+
+        {/* Hidden File Input for QR Code Upload */}
+        <input
+          type="file"
+          ref={qrInputRef}
+          onChange={handleQrUpload}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', alignItems: 'center', backgroundColor: '#f8fafc', padding: '1.25rem', borderRadius: '16px', border: '1px solid #e2e8f0', marginBottom: '1rem' }}>
+          <div>
+            <label className="form-label">Your UPI ID (VPA)</label>
+            <input
+              type="text"
+              name="upiId"
+              className="form-control"
+              placeholder="e.g. alex@okicici or 9876543210@paytm"
+              value={formData.upiId}
+              onChange={handleChange}
+            />
+            <span style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem', display: 'block' }}>
+              Buyers will use this UPI ID or scan your QR code to pay you directly.
+            </span>
+          </div>
+
+          <div>
+            <label className="form-label">Upload Custom Payment QR Image (Optional)</label>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={() => qrInputRef.current && qrInputRef.current.click()}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', backgroundColor: '#ffffff' }}
+              >
+                <FolderPlus size={16} /> Choose QR from Gallery
+              </button>
+              {formData.paymentQrImage && (
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={() => setFormData((prev) => ({ ...prev, paymentQrImage: '' }))}
+                >
+                  <X size={14} /> Remove QR
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* QR Code Scanner Preview Box */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.25rem',
+          backgroundColor: '#eef2ff',
+          border: '1.5px solid #c7d2fe',
+          borderRadius: '16px',
+          padding: '1rem 1.25rem'
+        }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            borderRadius: '12px',
+            backgroundColor: '#ffffff',
+            border: '2px solid #6366f1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            flexShrink: 0
+          }}>
+            <img
+              src={formData.paymentQrImage || `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${encodeURIComponent(formData.upiId || 'student@upi')}&pn=Seller&cu=INR`}
+              alt="Payment QR Preview"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, color: '#1e1b4b', fontSize: '0.95rem' }}>
+              {formData.paymentQrImage ? 'Custom QR Code Scanner Ready!' : 'Default Auto-Generated UPI Scanner Active'}
+            </div>
+            <p style={{ fontSize: '0.825rem', color: '#475569', margin: '0.2rem 0 0' }}>
+              Buyers can scan this QR code directly from their GPay/PhonePe app to pay you when purchasing "{formData.name || 'this item'}".
+            </p>
           </div>
         </div>
 
