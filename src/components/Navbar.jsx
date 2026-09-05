@@ -131,41 +131,53 @@ export const Navbar = () => {
                       <div style={{ fontSize: '0.78rem', color: '#64748b' }}>{user?.college}</div>
                     </div>
 
-                    <Link
-                      to="/profile"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      {user?.isAdmin ? <ShieldCheck size={16} color="#dc2626" /> : <User size={16} />}
-                      {user?.isAdmin ? 'Admin Profile' : 'Student Profile'}
-                    </Link>
-
-                    <Link
-                      to="/my-listings"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <ShoppingBag size={16} />
-                      My Listings
-                    </Link>
-
-                    <Link
-                      to="/wishlist"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <Heart size={16} />
-                      Saved Wishlist
-                    </Link>
-
-                    <Link
-                      to="/admin"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <LayoutDashboard size={16} />
-                      Admin Dashboard
-                    </Link>
+                    {user?.isAdmin ? (
+                      <>
+                        <Link
+                          to="/admin"
+                          className="dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          <LayoutDashboard size={16} color="#dc2626" />
+                          Admin Console
+                        </Link>
+                        <Link
+                          to="/profile"
+                          className="dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          <ShieldCheck size={16} color="#dc2626" />
+                          Admin Profile
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/profile"
+                          className="dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          <User size={16} />
+                          Student Profile
+                        </Link>
+                        <Link
+                          to="/my-listings"
+                          className="dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          <ShoppingBag size={16} />
+                          My Listings
+                        </Link>
+                        <Link
+                          to="/wishlist"
+                          className="dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          <Heart size={16} />
+                          Saved Wishlist
+                        </Link>
+                      </>
+                    )}
 
                     <div className="dropdown-divider"></div>
 
@@ -247,27 +259,48 @@ export const Navbar = () => {
               >
                 <Bell size={18} /> Notifications ({unreadCount})
               </NavLink>
-              <NavLink
-                to="/profile"
-                className="dropdown-item"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {user?.isAdmin ? <ShieldCheck size={18} /> : <User size={18} />} {user?.isAdmin ? 'Admin Profile' : 'Student Profile'} ({user?.name.split(' ')[0]})
-              </NavLink>
-              <NavLink
-                to="/my-listings"
-                className="dropdown-item"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <ShoppingBag size={18} /> My Listings
-              </NavLink>
-              <NavLink
-                to="/admin"
-                className="dropdown-item"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <LayoutDashboard size={18} /> Admin Dashboard
-              </NavLink>
+              {user?.isAdmin ? (
+                <>
+                  <NavLink
+                    to="/admin"
+                    className="dropdown-item"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LayoutDashboard size={18} /> Admin Console
+                  </NavLink>
+                  <NavLink
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <ShieldCheck size={18} /> Admin Profile ({user?.name.split(' ')[0]})
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User size={18} /> Student Profile ({user?.name.split(' ')[0]})
+                  </NavLink>
+                  <NavLink
+                    to="/my-listings"
+                    className="dropdown-item"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <ShoppingBag size={18} /> My Listings
+                  </NavLink>
+                  <NavLink
+                    to="/wishlist"
+                    className="dropdown-item"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Heart size={18} /> Wishlist ({wishlistCount})
+                  </NavLink>
+                </>
+              )}
               <button className="btn btn-danger btn-sm" onClick={handleLogout} style={{ marginTop: '1rem' }}>
                 Logout
               </button>

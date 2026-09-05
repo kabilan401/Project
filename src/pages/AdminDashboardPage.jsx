@@ -17,10 +17,36 @@ import {
 import { MOCK_ADMIN_STATS, CATEGORIES } from '../data/mockData';
 import { useProducts } from '../context/ProductContext';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
 
 export const AdminDashboardPage = () => {
+  const { user } = useAuth();
   const { products, deleteProduct, clearAllProducts } = useProducts();
   const { addToast } = useToast();
+
+  if (!user?.isAdmin) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', padding: '5rem 1.5rem', maxWidth: '540px' }}>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fee2e2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
+          <ShieldCheck size={36} />
+        </div>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.75rem' }}>
+          Admin Web Access Restricted
+        </h2>
+        <p style={{ color: '#64748b', lineHeight: 1.6, marginBottom: '2rem' }}>
+          The Admin Web Console is restricted to verified administrators. Please register or login with an Admin Account to access platform management.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link to="/admin/login" className="btn btn-danger btn-lg">
+            <ShieldCheck size={18} /> Admin Portal Login
+          </Link>
+          <Link to="/register" className="btn btn-outline btn-lg">
+            Register Admin Account
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'students' | 'products' | 'categories' | 'reported' | 'stats'
   const [students, setStudents] = useState(MOCK_ADMIN_STATS.studentsList);

@@ -9,6 +9,8 @@ export const RegisterPage = () => {
   const { register } = useAuth();
   const { addToast } = useToast();
 
+  const [accountType, setAccountType] = useState('Student'); // 'Student' | 'Admin'
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,7 +38,7 @@ export const RegisterPage = () => {
     if (!formData.email.trim() || !formData.email.includes('@')) newErrors.email = 'Valid email address is required';
     if (!formData.password || formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-    if (!formData.college.trim()) newErrors.college = 'College name is required';
+    if (!formData.college.trim()) newErrors.college = accountType === 'Admin' ? 'Organization HQ name is required' : 'College name is required';
     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -49,24 +51,95 @@ export const RegisterPage = () => {
       return;
     }
 
-    const res = register(formData);
-    addToast(`Registration successful! Welcome to CampusMart, ${res.user.name}.`, 'success');
-    navigate('/marketplace');
+    const res = register({
+      ...formData,
+      accountType,
+      isAdmin: accountType === 'Admin',
+      role: accountType === 'Admin' ? 'Admin' : 'Student'
+    });
+
+    if (accountType === 'Admin') {
+      addToast(`Administrator Account Created! Welcome to Admin Console, ${res.user.name}.`, 'success');
+      navigate('/admin');
+    } else {
+      addToast(`Student Registration successful! Welcome, ${res.user.name}.`, 'success');
+      navigate('/marketplace');
+    }
   };
 
   return (
     <div className="register-page page-container" style={{ maxWidth: '640px', paddingTop: '2.5rem' }}>
       <div style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        border: accountType === 'Admin' ? '2px solid #dc2626' : '1px solid #e2e8f0',
         borderRadius: '24px',
         padding: '2.5rem',
-        boxShadow: 'var(--shadow-lg)'
+        boxShadow: 'var(--shadow-lg)',
+        transition: 'all 0.3s ease'
       }}>
+        {/* Account Type Toggle */}
+        <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '14px', padding: '4px', marginBottom: '2rem' }}>
+          <button
+            type="button"
+            onClick={() => setAccountType('Student')}
+            style={{
+              flex: 1,
+              padding: '0.65rem',
+              borderRadius: '10px',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              border: 'none',
+              backgroundColor: accountType === 'Student' ? '#4f46e5' : 'transparent',
+              color: accountType === 'Student' ? '#ffffff' : '#64748b',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'center',
+              gap: '0.4rem',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <GraduationCap size={16} /> Student Account
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setAccountType('Admin');
+              setFormData((prev) => ({
+                ...prev,
+                college: 'CampusMart System HQ',
+                department: 'Platform Operations & Safety',
+                year: 'System Administrator'
+              }));
+            }}
+            style={{
+              flex: 1,
+              padding: '0.65rem',
+              borderRadius: '10px',
+              fontWeight: 700,
+              fontSize: '0.9rem',
+              border: 'none',
+              backgroundColor: accountType === 'Admin' ? '#dc2626' : 'transparent',
+              color: accountType === 'Admin' ? '#ffffff' : '#64748b',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'center',
+              gap: '0.4rem',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <ShieldCheck size={16} /> Admin Registration
+          </button>
+        </div>
+
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>Join CampusMart</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>
+            {accountType === 'Admin' ? 'Register Platform Admin' : 'Join CampusMart'}
+          </h1>
           <p style={{ color: '#64748b', fontSize: '0.95rem', marginTop: '0.35rem' }}>
-            Create your verified student account to buy and sell on campus
+            {accountType === 'Admin' ? 'Create an Administrator account to access the Admin Web Console' : 'Create your verified student account to buy and sell on campus'}
           </p>
         </div>
 
@@ -78,7 +151,7 @@ export const RegisterPage = () => {
                 type="text"
                 name="name"
                 className={`form-control ${errors.name ? 'error' : ''}`}
-                placeholder="Rohan Sharma"
+                placeholder={accountType === 'Admin' ? 'Admin Name' : 'Rohan Sharma'}
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -86,12 +159,12 @@ export const RegisterPage = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">College Email *</label>
+              <label className="form-label">{accountType === 'Admin' ? 'Admin Email *' : 'College Email *'}</label>
               <input
                 type="email"
                 name="email"
                 className={`form-control ${errors.email ? 'error' : ''}`}
-                placeholder="student@iitd.ac.in"
+                placeholder={accountType === 'Admin' ? 'admin@campusmart.in' : 'student@iitd.ac.in'}
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -129,12 +202,12 @@ export const RegisterPage = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">College / University *</label>
+              <label className="form-label">{accountType === 'Admin' ? 'Organization / HQ *' : 'College / University *'}</label>
               <input
                 type="text"
                 name="college"
                 className={`form-control ${errors.college ? 'error' : ''}`}
-                placeholder="IIT Delhi"
+                placeholder={accountType === 'Admin' ? 'CampusMart System HQ' : 'IIT Delhi'}
                 value={formData.college}
                 onChange={handleChange}
               />
@@ -142,12 +215,12 @@ export const RegisterPage = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Department / Branch</label>
+              <label className="form-label">{accountType === 'Admin' ? 'Operations Department' : 'Department / Branch'}</label>
               <input
                 type="text"
                 name="department"
                 className="form-control"
-                placeholder="Computer Science"
+                placeholder={accountType === 'Admin' ? 'Platform Moderation' : 'Computer Science'}
                 value={formData.department}
                 onChange={handleChange}
               />
@@ -156,14 +229,24 @@ export const RegisterPage = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Academic Year</label>
-              <select name="year" className="form-control" value={formData.year} onChange={handleChange}>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-                <option value="Postgraduate / PhD">Postgraduate / PhD</option>
-              </select>
+              <label className="form-label">{accountType === 'Admin' ? 'Designation Role' : 'Academic Year'}</label>
+              {accountType === 'Admin' ? (
+                <input
+                  type="text"
+                  name="year"
+                  className="form-control"
+                  value={formData.year}
+                  onChange={handleChange}
+                />
+              ) : (
+                <select name="year" className="form-control" value={formData.year} onChange={handleChange}>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                  <option value="Postgraduate / PhD">Postgraduate / PhD</option>
+                </select>
+              )}
             </div>
 
             <div className="form-group">
@@ -180,14 +263,18 @@ export const RegisterPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%', marginTop: '1rem' }}>
-            Create Student Account
+          <button
+            type="submit"
+            className={`btn ${accountType === 'Admin' ? 'btn-danger' : 'btn-primary'} btn-lg`}
+            style={{ width: '100%', marginTop: '1rem' }}
+          >
+            {accountType === 'Admin' ? 'Create Admin Account & Enter Portal' : 'Create Student Account'}
           </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#64748b' }}>
           Already have an account?{' '}
-          <Link to="/login" style={{ color: '#4f46e5', fontWeight: 700 }}>
+          <Link to={accountType === 'Admin' ? '/admin/login' : '/login'} style={{ color: accountType === 'Admin' ? '#dc2626' : '#4f46e5', fontWeight: 700 }}>
             Login Here
           </Link>
         </div>

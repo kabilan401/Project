@@ -85,20 +85,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = (formData) => {
+    const isAdminAccount = formData.accountType === 'Admin' || formData.isAdmin || formData.role === 'Admin';
     const newUser = {
-      id: 'user-' + Date.now(),
+      id: (isAdminAccount ? 'admin-' : 'user-') + Date.now(),
       name: formData.name,
       email: formData.email,
-      role: 'Student',
-      isAdmin: false,
-      college: formData.college || 'IIT Delhi',
-      department: formData.department || 'Computer Science',
-      year: formData.year || '1st Year',
+      role: isAdminAccount ? 'Admin' : 'Student',
+      isAdmin: isAdminAccount,
+      college: formData.college || (isAdminAccount ? 'CampusMart System HQ' : 'IIT Delhi'),
+      department: formData.department || (isAdminAccount ? 'Platform Operations & Safety' : 'Computer Science'),
+      year: formData.year || (isAdminAccount ? 'System Administrator' : '1st Year'),
       phone: formData.phone || '+91 98765 00000',
       rating: 5.0,
       reviewsCount: 0,
       joinedDate: 'Sep 2026',
-      location: (formData.college || 'Campus') + ' Hostel'
+      location: formData.location || (isAdminAccount ? 'Campus HQ Control Center' : (formData.college || 'Campus') + ' Hostel')
     };
     setUser(newUser);
     localStorage.setItem('campusmart_user', JSON.stringify(newUser));
