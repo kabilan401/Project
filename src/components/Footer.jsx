@@ -50,10 +50,11 @@ export const Footer = () => {
           <h4 className="footer-title">Top Categories</h4>
           <ul className="footer-links">
             <li><Link to="/marketplace?category=Books%20%26%20Notes" className="footer-link">Books & Notes</Link></li>
-            <li><Link to="/marketplace?category=Electronics" className="footer-link">Electronics</Link></li>
-            <li><Link to="/marketplace?category=Hostel%20Items" className="footer-link">Hostel Gear</Link></li>
-            <li><Link to="/marketplace?category=Calculators" className="footer-link">Calculators</Link></li>
-            <li><Link to="/marketplace?category=Cycles" className="footer-link">Cycles</Link></li>
+            <li><Link to={`/marketplace?category=${encodeURIComponent('Scientific Calculators')}`} className="footer-link">Scientific Calculators</Link></li>
+            <li><Link to={`/marketplace?category=${encodeURIComponent('Lab Equipment & Aprons')}`} className="footer-link">Lab Equipment & Aprons</Link></li>
+            <li><Link to={`/marketplace?category=${encodeURIComponent('Laptops & Electronics')}`} className="footer-link">Laptops & Electronics</Link></li>
+            <li><Link to={`/marketplace?category=${encodeURIComponent('Hostel & Dorm Essentials')}`} className="footer-link">Hostel Essentials</Link></li>
+            <li><Link to={`/marketplace?category=${encodeURIComponent('Campus Bicycles')}`} className="footer-link">Campus Bicycles</Link></li>
           </ul>
         </div>
 

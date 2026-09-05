@@ -116,8 +116,11 @@ export const Navbar = () => {
                 <button
                   className="user-avatar-btn"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.35rem 0.75rem', borderRadius: '9999px', background: '#f1f5f9' }}
                 >
-                  <img src={user?.avatar} alt={user?.name} className="avatar-img" />
+                  <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: user?.isAdmin ? '#dc2626' : '#4f46e5', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {user?.isAdmin ? <ShieldCheck size={15} /> : <User size={15} />}
+                  </div>
                   <span className="avatar-name">{user?.name.split(' ')[0]}</span>
                 </button>
 
@@ -133,8 +136,8 @@ export const Navbar = () => {
                       className="dropdown-item"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      <User size={16} />
-                      Student Profile
+                      {user?.isAdmin ? <ShieldCheck size={16} color="#dc2626" /> : <User size={16} />}
+                      {user?.isAdmin ? 'Admin Profile' : 'Student Profile'}
                     </Link>
 
                     <Link
@@ -249,7 +252,7 @@ export const Navbar = () => {
                 className="dropdown-item"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <User size={18} /> Profile ({user?.name})
+                {user?.isAdmin ? <ShieldCheck size={18} /> : <User size={18} />} {user?.isAdmin ? 'Admin Profile' : 'Student Profile'} ({user?.name.split(' ')[0]})
               </NavLink>
               <NavLink
                 to="/my-listings"

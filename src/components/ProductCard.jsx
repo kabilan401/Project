@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, MapPin, Eye, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Heart, MapPin, Eye, ArrowRight, CheckCircle2, User } from 'lucide-react';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 
@@ -65,7 +65,9 @@ export const ProductCard = ({ product, viewMode = 'grid' }) => {
 
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <div className="card-seller-info" style={{ borderTop: 'none', padding: 0, marginTop: 0 }}>
-                <img src={product.seller.avatar} alt={product.seller.name} className="seller-avatar" />
+                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e0e7ff', color: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <User size={13} />
+                </div>
                 <span style={{ fontWeight: 600 }}>{product.seller.name}</span>
                 <span className="seller-location">
                   <MapPin size={12} /> {product.college}
@@ -116,7 +118,9 @@ export const ProductCard = ({ product, viewMode = 'grid' }) => {
         </div>
 
         <div className="card-seller-info">
-          <img src={product.seller.avatar} alt={product.seller.name} className="seller-avatar" />
+          <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e0e7ff', color: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <User size={13} />
+          </div>
           <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100px' }}>
             {product.seller.name}
           </span>

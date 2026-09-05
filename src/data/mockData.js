@@ -2,13 +2,12 @@ import {
   BookOpen, 
   Laptop, 
   Calculator, 
-  ShoppingBag, 
   Home, 
   Bike, 
   Shirt, 
-  Gamepad2, 
   PenTool, 
-  Package 
+  FlaskConical,
+  Trophy
 } from 'lucide-react';
 
 export const CATEGORIES = [
@@ -22,17 +21,8 @@ export const CATEGORIES = [
     description: 'Textbooks, semester notes, reference guides & exam preparation material.'
   },
   {
-    id: 'electronics',
-    name: 'Electronics',
-    iconName: 'Laptop',
-    count: 0,
-    color: '#0284c7',
-    bg: '#e0f2fe',
-    description: 'Laptops, headphones, keyboards, mice, adapters & gadgets.'
-  },
-  {
     id: 'calculators',
-    name: 'Calculators',
+    name: 'Scientific Calculators',
     iconName: 'Calculator',
     count: 0,
     color: '#d97706',
@@ -40,17 +30,26 @@ export const CATEGORIES = [
     description: 'Scientific, graphing, and programmable calculators for engineering & maths.'
   },
   {
-    id: 'bags-accessories',
-    name: 'Bags & Accessories',
-    iconName: 'ShoppingBag',
+    id: 'lab-equipment',
+    name: 'Lab Equipment & Aprons',
+    iconName: 'FlaskConical',
     count: 0,
     color: '#059669',
     bg: '#d1fae5',
-    description: 'Backpacks, laptop sleeves, travel bags, and daily carry items.'
+    description: 'Lab coats, aprons, safety goggles, dissection sets & experimental kits.'
+  },
+  {
+    id: 'electronics',
+    name: 'Laptops & Electronics',
+    iconName: 'Laptop',
+    count: 0,
+    color: '#0284c7',
+    bg: '#e0f2fe',
+    description: 'Laptops, headphones, keyboards, mice, adapters & project gadgets.'
   },
   {
     id: 'hostel-items',
-    name: 'Hostel Items',
+    name: 'Hostel & Dorm Essentials',
     iconName: 'Home',
     count: 0,
     color: '#7c3aed',
@@ -59,7 +58,7 @@ export const CATEGORIES = [
   },
   {
     id: 'cycles',
-    name: 'Cycles',
+    name: 'Campus Bicycles',
     iconName: 'Bike',
     count: 0,
     color: '#dc2626',
@@ -67,40 +66,31 @@ export const CATEGORIES = [
     description: 'Geared and non-geared campus bicycles, helmets & locks.'
   },
   {
-    id: 'fashion',
-    name: 'Fashion',
-    iconName: 'Shirt',
-    count: 0,
-    color: '#db2777',
-    bg: '#fce7f3',
-    description: 'Hoodies, lab coats, jackets, sneakers, traditional wear & accessories.'
-  },
-  {
-    id: 'gaming',
-    name: 'Gaming',
-    iconName: 'Gamepad2',
-    count: 0,
-    color: '#2563eb',
-    bg: '#dbeafe',
-    description: 'Consoles, controllers, gaming mice, pads & game titles.'
-  },
-  {
     id: 'stationery',
-    name: 'Stationery',
+    name: 'Study Tools & Stationery',
     iconName: 'PenTool',
     count: 0,
     color: '#65a30d',
     bg: '#ecfccb',
-    description: 'Engineering drawing kits, notebooks, desk supplies & files.'
+    description: 'Engineering drawing kits, drafters, notebooks, desk supplies & files.'
   },
   {
-    id: 'other',
-    name: 'Other',
-    iconName: 'Package',
+    id: 'college-wear',
+    name: 'Uniforms & College Wear',
+    iconName: 'Shirt',
     count: 0,
-    color: '#475569',
-    bg: '#f1f5f9',
-    description: 'Sports equipment, musical instruments & miscellaneous campus items.'
+    color: '#db2777',
+    bg: '#fce7f3',
+    description: 'Department hoodies, college uniforms, lab jackets & blazer badges.'
+  },
+  {
+    id: 'sports',
+    name: 'Campus Sports & Fitness',
+    iconName: 'Trophy',
+    count: 0,
+    color: '#2563eb',
+    bg: '#dbeafe',
+    description: 'Badminton rackets, footballs, cricket gear & fitness equipment.'
   }
 ];
 
@@ -113,7 +103,6 @@ export const DEMO_USER = {
   email: 'student@college.edu',
   role: 'Student',
   isAdmin: false,
-  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
   college: 'University Campus',
   department: 'General Engineering',
   year: '1st Year',
@@ -144,10 +133,14 @@ export const MOCK_ADMIN_STATS = {
   ],
   categoryDistribution: [
     { name: 'Books & Notes', count: 0, percent: 0 },
-    { name: 'Electronics', count: 0, percent: 0 },
-    { name: 'Hostel Items', count: 0, percent: 0 },
-    { name: 'Calculators', count: 0, percent: 0 },
-    { name: 'Cycles & Others', count: 0, percent: 0 }
+    { name: 'Scientific Calculators', count: 0, percent: 0 },
+    { name: 'Lab Equipment & Aprons', count: 0, percent: 0 },
+    { name: 'Laptops & Electronics', count: 0, percent: 0 },
+    { name: 'Hostel & Dorm Essentials', count: 0, percent: 0 },
+    { name: 'Campus Bicycles', count: 0, percent: 0 },
+    { name: 'Study Tools & Stationery', count: 0, percent: 0 },
+    { name: 'Uniforms & College Wear', count: 0, percent: 0 },
+    { name: 'Campus Sports & Fitness', count: 0, percent: 0 }
   ],
   studentsList: [],
   reportedItems: []

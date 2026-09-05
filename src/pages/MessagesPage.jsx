@@ -9,7 +9,8 @@ import {
   MoreVertical, 
   CheckCheck, 
   MapPin, 
-  Circle 
+  Circle,
+  User
 } from 'lucide-react';
 import { useChat } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
@@ -107,7 +108,9 @@ export const MessagesPage = () => {
                     }}
                   >
                     <div style={{ position: 'relative' }}>
-                      <img src={conv.otherUser.avatar} alt={conv.otherUser.name} style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }} />
+                      <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#e0e7ff', color: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <User size={22} />
+                      </div>
                       <span style={{
                         position: 'absolute',
                         bottom: '2px',
@@ -156,7 +159,9 @@ export const MessagesPage = () => {
               backgroundColor: '#ffffff'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                <img src={activeConversation.otherUser.avatar} alt={activeConversation.otherUser.name} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#e0e7ff', color: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <User size={20} />
+                </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     {activeConversation.otherUser.name}

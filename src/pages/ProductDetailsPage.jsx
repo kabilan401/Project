@@ -14,7 +14,8 @@ import {
   Star, 
   Building, 
   ArrowLeft,
-  Eye
+  Eye,
+  User
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -231,7 +232,9 @@ export const ProductDetailsPage = () => {
             marginBottom: '1.5rem'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <img src={product.seller.avatar} alt={product.seller.name} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#e0e7ff', color: '#4f46e5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <User size={28} />
+              </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <h4 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{product.seller.name}</h4>

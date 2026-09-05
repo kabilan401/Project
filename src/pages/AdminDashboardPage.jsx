@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Users, 
   ShoppingBag, 
@@ -10,7 +11,8 @@ import {
   Check, 
   Tag, 
   RotateCcw,
-  Sparkles
+  Sparkles,
+  User
 } from 'lucide-react';
 import { MOCK_ADMIN_STATS, CATEGORIES } from '../data/mockData';
 import { useProducts } from '../context/ProductContext';
@@ -70,9 +72,14 @@ export const AdminDashboardPage = () => {
           <p className="page-subtitle">Monitor marketplace analytics, moderate student users and products</p>
         </div>
 
-        <button className="btn btn-danger btn-sm" onClick={handleClearAllData}>
-          <RotateCcw size={16} /> Reset Fresh Website (Clear All Products)
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link to="/profile" className="btn btn-outline btn-sm" style={{ backgroundColor: '#ffffff' }}>
+            <ShieldCheck size={16} color="#dc2626" /> Edit Admin Profile
+          </Link>
+          <button className="btn btn-danger btn-sm" onClick={handleClearAllData}>
+            <RotateCcw size={16} /> Reset Fresh Website (Clear All Products)
+          </button>
+        </div>
       </div>
 
       {/* Top 5 Metric Cards */}

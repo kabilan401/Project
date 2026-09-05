@@ -66,7 +66,6 @@ export const ChatProvider = ({ children }) => {
       otherUser: {
         id: product.seller.id,
         name: product.seller.name,
-        avatar: product.seller.avatar,
         college: product.seller.college,
         status: 'online'
       },

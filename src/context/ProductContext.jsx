@@ -39,7 +39,6 @@ export const ProductProvider = ({ children }) => {
       seller: {
         id: currentUser?.id || 'user-' + Date.now(),
         name: currentUser?.name || 'Student User',
-        avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
         rating: currentUser?.rating || 5.0,
         reviewsCount: currentUser?.reviewsCount || 0,
         college: newProdData.college || currentUser?.college || 'University Campus',

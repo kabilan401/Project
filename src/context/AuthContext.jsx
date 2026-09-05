@@ -26,30 +26,42 @@ export const AuthProvider = ({ children }) => {
         email: 'admin@campusmart.in',
         role: 'Admin',
         isAdmin: true,
-        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
         college: 'CampusMart HQ',
         department: 'Operations & Safety',
-        year: 'Staff',
+        year: 'System Administrator',
         phone: '+91 99000 11223',
         rating: 5.0,
-        joinedDate: 'Jan 2024'
+        joinedDate: 'Jan 2024',
+        location: 'Campus HQ Control Room'
       };
       setUser(adminUser);
+      localStorage.setItem('campusmart_user', JSON.stringify(adminUser));
       return { success: true, user: adminUser };
     }
 
     // Standard student login
-    const loggedUser = {
+    const saved = localStorage.getItem('campusmart_user');
+    const existingUser = saved ? JSON.parse(saved) : null;
+
+    const loggedUser = existingUser ? {
+      ...existingUser,
+      email: email || existingUser.email
+    } : {
       ...DEMO_USER,
       email: email || DEMO_USER.email,
     };
     setUser(loggedUser);
+    localStorage.setItem('campusmart_user', JSON.stringify(loggedUser));
     return { success: true, user: loggedUser };
   };
 
   const loginAsDemo = () => {
-    setUser(DEMO_USER);
-    return { success: true, user: DEMO_USER };
+    const saved = localStorage.getItem('campusmart_user');
+    const existingUser = saved ? JSON.parse(saved) : null;
+    const demoUserToUse = existingUser || DEMO_USER;
+    setUser(demoUserToUse);
+    localStorage.setItem('campusmart_user', JSON.stringify(demoUserToUse));
+    return { success: true, user: demoUserToUse };
   };
 
   const loginAsAdmin = () => {
@@ -59,15 +71,16 @@ export const AuthProvider = ({ children }) => {
       email: 'admin@campusmart.in',
       role: 'Admin',
       isAdmin: true,
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
       college: 'CampusMart System HQ',
       department: 'Platform Admin',
-      year: 'Staff',
+      year: 'System Administrator',
       phone: '+91 99000 11223',
       rating: 5.0,
-      joinedDate: 'Jan 2024'
+      joinedDate: 'Jan 2024',
+      location: 'Campus HQ Control Room'
     };
     setUser(adminUser);
+    localStorage.setItem('campusmart_user', JSON.stringify(adminUser));
     return { success: true, user: adminUser };
   };
 
@@ -78,7 +91,6 @@ export const AuthProvider = ({ children }) => {
       email: formData.email,
       role: 'Student',
       isAdmin: false,
-      avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80`,
       college: formData.college || 'IIT Delhi',
       department: formData.department || 'Computer Science',
       year: formData.year || '1st Year',
@@ -89,12 +101,13 @@ export const AuthProvider = ({ children }) => {
       location: (formData.college || 'Campus') + ' Hostel'
     };
     setUser(newUser);
+    localStorage.setItem('campusmart_user', JSON.stringify(newUser));
     return { success: true, user: newUser };
   };
 
   const updateProfile = (updatedFields) => {
     setUser((prev) => {
-      const next = { ...prev, ...updatedFields };
+      const next = { ...(prev || DEMO_USER), ...updatedFields };
       localStorage.setItem('campusmart_user', JSON.stringify(next));
       return next;
     });

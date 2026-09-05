@@ -8,8 +8,9 @@ import {
   Home, 
   Bike, 
   Shirt, 
-  Gamepad2, 
   PenTool, 
+  FlaskConical,
+  Trophy,
   Package 
 } from 'lucide-react';
 
@@ -21,8 +22,9 @@ const iconMap = {
   Home,
   Bike,
   Shirt,
-  Gamepad2,
   PenTool,
+  FlaskConical,
+  Trophy,
   Package
 };
 
