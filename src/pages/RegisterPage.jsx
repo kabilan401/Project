@@ -135,6 +135,19 @@ export const RegisterPage = () => {
         </div>
 
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div className="brand-icon" style={{
+            width: '52px',
+            height: '52px',
+            margin: '0 auto 1rem',
+            borderRadius: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'center',
+            flexShrink: 0,
+            background: accountType === 'Admin' ? 'linear-gradient(135deg, #dc2626, #991b1b)' : 'linear-gradient(135deg, #4f46e5, #6366f1)'
+          }}>
+            {accountType === 'Admin' ? <ShieldCheck size={28} /> : <User size={26} />}
+          </div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a' }}>
             {accountType === 'Admin' ? 'Register Platform Admin' : 'Join CampusMart'}
           </h1>

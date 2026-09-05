@@ -140,6 +140,8 @@ input, select, textarea {
   font-weight: 800;
   color: var(--neutral-900);
   letter-spacing: -0.02em;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .brand-icon {
@@ -151,6 +153,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
@@ -922,6 +925,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  line-height: 1;
 }
 
 .footer-tagline {
