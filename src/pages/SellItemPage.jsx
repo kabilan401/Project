@@ -169,15 +169,25 @@ export const SellItemPage = () => {
       origin: { y: 0.6 }
     });
 
-    addToast(`Successfully published "${newProd.name}"!`, 'success');
-    addNotification(
-      'Listing Published!',
-      `Your item "${newProd.name}" is now live on CampusMart marketplace.`,
-      'listing',
-      `/product/${newProd.id}`
-    );
-
-    navigate(`/product/${newProd.id}`);
+    if (user?.isAdmin) {
+      addToast(`Admin published "${newProd.name}" directly to website!`, 'success');
+      addNotification(
+        'Listing Live!',
+        `Your item "${newProd.name}" was published directly to CampusMart marketplace.`,
+        'listing',
+        `/product/${newProd.id}`
+      );
+      navigate(`/product/${newProd.id}`);
+    } else {
+      addToast(`Submitted "${newProd.name}"! Waiting for Admin Verification to launch.`, 'info');
+      addNotification(
+        'Submitted for Verification',
+        `Your product "${newProd.name}" has been submitted for Admin Verification. Admin will review & launch it shortly.`,
+        'listing',
+        `/my-listings`
+      );
+      navigate('/my-listings');
+    }
   };
 
   return (

@@ -44,6 +44,11 @@ export const MarketplacePage = () => {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
+      // Only display Admin approved active products
+      if (p.status !== 'Active') {
+        return false;
+      }
+
       // Search filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();

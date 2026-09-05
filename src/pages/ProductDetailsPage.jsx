@@ -17,7 +17,8 @@ import {
   Eye,
   User,
   QrCode,
-  CreditCard
+  CreditCard,
+  XCircle
 } from 'lucide-react';
 import { useProducts } from '../context/ProductContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -32,7 +33,7 @@ import { PaymentQrModal } from '../components/PaymentQrModal';
 export const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getProductById, products } = useProducts();
+  const { getProductById, products, approveProduct, rejectProduct } = useProducts();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { startConversationWithSeller } = useChat();
   const { addToast } = useToast();
@@ -49,6 +50,25 @@ export const ProductDetailsPage = () => {
       <div className="page-container" style={{ textAlign: 'center', padding: '5rem 1.5rem' }}>
         <h2>Product Not Found</h2>
         <p style={{ color: '#64748b', margin: '1rem 0' }}>The item you are looking for does not exist or has been removed.</p>
+        <Link to="/marketplace" className="btn btn-primary">Back to Marketplace</Link>
+      </div>
+    );
+  }
+
+  const isOwner = user?.id === product.seller?.id || user?.name === product.seller?.name;
+  const isAdmin = user?.isAdmin || false;
+
+  // If rejected and viewer is not seller/admin, hide content
+  if (product.status === 'Rejected' && !isOwner && !isAdmin) {
+    return (
+      <div className="page-container" style={{ textAlign: 'center', padding: '5rem 1.5rem', maxWidth: '520px' }}>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fee2e2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
+          <XCircle size={36} />
+        </div>
+        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.75rem' }}>Listing Rejected by Admin</h2>
+        <p style={{ color: '#64748b', lineHeight: 1.6, marginBottom: '2rem' }}>
+          This product listing was rejected by admin moderation and is not visible to others on the public marketplace.
+        </p>
         <Link to="/marketplace" className="btn btn-primary">Back to Marketplace</Link>
       </div>
     );
@@ -81,11 +101,65 @@ export const ProductDetailsPage = () => {
   };
 
   const similarProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter((p) => p.category === product.category && p.id !== product.id && p.status === 'Active')
     .slice(0, 4);
+
+  const handleApproveByAdmin = () => {
+    approveProduct(product.id);
+    addToast(`Approved & Launched "${product.name}" onto website!`, 'success');
+  };
+
+  const handleRejectByAdmin = () => {
+    const reason = window.prompt('Enter rejection reason for seller:', 'Product does not meet campus marketplace safety guidelines.');
+    if (reason !== null) {
+      rejectProduct(product.id, reason);
+      addToast(`Product rejected. Seller notified.`, 'info');
+    }
+  };
 
   return (
     <div className="product-details-page page-container">
+      {/* Admin / Seller Verification Callout Banner */}
+      {product.status !== 'Active' && (
+        <div style={{
+          backgroundColor: product.status === 'Pending Verification' ? '#fef3c7' : '#fee2e2',
+          border: product.status === 'Pending Verification' ? '1.5px solid #f59e0b' : '1.5px solid #ef4444',
+          borderRadius: '16px',
+          padding: '1.25rem 1.5rem',
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1rem',
+          flexWrap: 'wrap'
+        }}>
+          <div>
+            <div style={{ fontWeight: 800, color: product.status === 'Pending Verification' ? '#92400e' : '#991b1b', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <ShieldCheck size={20} />
+              {product.status === 'Pending Verification'
+                ? '🟡 Pending Admin Verification & Approval'
+                : '🔴 Product Rejected by Admin'}
+            </div>
+            <p style={{ fontSize: '0.875rem', color: product.status === 'Pending Verification' ? '#78350f' : '#7f1d1d', margin: '0.25rem 0 0' }}>
+              {product.status === 'Pending Verification'
+                ? 'This listing has been submitted and is awaiting Admin review before appearing on the public website marketplace.'
+                : `This listing was rejected. Reason: ${product.rejectionReason || 'Did not meet campus guidelines.'}`}
+            </p>
+          </div>
+
+          {user?.isAdmin && product.status === 'Pending Verification' && (
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="btn btn-success btn-sm" onClick={handleApproveByAdmin} style={{ backgroundColor: '#059669', color: '#ffffff', border: 'none' }}>
+                <CheckCircle2 size={16} /> Accept & Launch to Website
+              </button>
+              <button className="btn btn-danger btn-sm" onClick={handleRejectByAdmin}>
+                Reject Product
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Breadcrumb Navigation */}
       <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#64748b' }}>
         <Link to="/marketplace" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#4f46e5', fontWeight: 600 }}>

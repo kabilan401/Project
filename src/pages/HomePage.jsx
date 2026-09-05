@@ -22,9 +22,10 @@ export const HomePage = () => {
   const { products } = useProducts();
   const [heroSearch, setHeroSearch] = useState('');
 
-  const featuredProducts = products.filter((p) => p.featured || p.price > 1000).slice(0, 4);
-  const recentlyAddedProducts = products.slice(0, 4);
-  const popularProducts = products.filter((p) => p.popular || p.views > 150).slice(0, 4);
+  const activeProducts = products.filter((p) => p.status === 'Active');
+  const featuredProducts = activeProducts.filter((p) => p.featured || p.price > 1000).slice(0, 4);
+  const recentlyAddedProducts = activeProducts.slice(0, 4);
+  const popularProducts = activeProducts.filter((p) => p.popular || p.views > 150).slice(0, 4);
 
   const handleHeroSearchSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +50,7 @@ export const HomePage = () => {
           maxWidth: '1280px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: products.length > 0 ? '1.2fr 0.8fr' : '1fr',
+          gridTemplateColumns: activeProducts.length > 0 ? '1.2fr 0.8fr' : '1fr',
           gap: '3rem',
           alignItems: 'center'
         }}>
@@ -119,7 +120,7 @@ export const HomePage = () => {
           </div>
 
           {/* Hero Visual Card Stack */}
-          {products.length > 0 && (
+          {activeProducts.length > 0 && (
             <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
               <div style={{
                 width: '100%',
@@ -138,15 +139,15 @@ export const HomePage = () => {
                 </div>
                 
                 <div style={{ width: '100%', height: '200px', borderRadius: '16px', overflow: 'hidden', marginBottom: '1rem' }}>
-                  <img src={products[0]?.images[0]} alt="Hero featured product" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={activeProducts[0]?.images[0]} alt="Hero featured product" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
 
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>{products[0]?.name}</h3>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>{activeProducts[0]?.name}</h3>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
-                    <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>₹{products[0]?.price}</span>
+                    <span style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>₹{activeProducts[0]?.price}</span>
                   </div>
-                  <Link to={`/product/${products[0]?.id}`} className="btn btn-soft btn-sm">
+                  <Link to={`/product/${activeProducts[0]?.id}`} className="btn btn-soft btn-sm">
                     View <ArrowRight size={14} />
                   </Link>
                 </div>
@@ -193,7 +194,7 @@ export const HomePage = () => {
           </Link>
         </div>
 
-        {products.length === 0 ? (
+        {activeProducts.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon">
               <PlusCircle size={36} />

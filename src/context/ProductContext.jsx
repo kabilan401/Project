@@ -25,6 +25,9 @@ export const ProductProvider = ({ children }) => {
 
   const addProduct = (newProdData, currentUser) => {
     const newId = 'prod-' + Date.now();
+    const isAdminCreator = currentUser?.isAdmin || false;
+    const initialStatus = isAdminCreator ? 'Active' : 'Pending Verification';
+
     const newProduct = {
       id: newId,
       name: newProdData.name,
@@ -56,14 +59,40 @@ export const ProductProvider = ({ children }) => {
       department: newProdData.department || 'General',
       postedDate: 'Just now',
       createdAt: new Date().toISOString(),
-      status: 'Active',
+      status: initialStatus, // 'Pending Verification' | 'Active' | 'Rejected' | 'Sold'
       views: 1,
       featured: false,
-      popular: false
+      popular: false,
+      rejectionReason: null
     };
 
     setProducts((prev) => [newProduct, ...prev]);
     return newProduct;
+  };
+
+  const approveProduct = (id) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? { ...p, status: 'Active', approvedAt: new Date().toISOString(), rejectionReason: null }
+          : p
+      )
+    );
+  };
+
+  const rejectProduct = (id, reason) => {
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? {
+              ...p,
+              status: 'Rejected',
+              rejectedAt: new Date().toISOString(),
+              rejectionReason: reason || 'Listing did not meet campus marketplace guidelines.'
+            }
+          : p
+      )
+    );
   };
 
   const updateProduct = (id, updatedFields) => {
@@ -97,16 +126,33 @@ export const ProductProvider = ({ children }) => {
     return products.find((p) => p.id === id);
   };
 
+  const getPendingProducts = () => {
+    return products.filter((p) => p.status === 'Pending Verification');
+  };
+
+  const getApprovedProducts = () => {
+    return products.filter((p) => p.status === 'Active');
+  };
+
+  const getRejectedProducts = () => {
+    return products.filter((p) => p.status === 'Rejected');
+  };
+
   return (
     <ProductContext.Provider value={{
       products,
       addProduct,
+      approveProduct,
+      rejectProduct,
       updateProduct,
       deleteProduct,
       markAsSold,
       markAsActive,
       clearAllProducts,
-      getProductById
+      getProductById,
+      getPendingProducts,
+      getApprovedProducts,
+      getRejectedProducts
     }}>
       {children}
     </ProductContext.Provider>
