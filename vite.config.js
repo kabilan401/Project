@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Project/', // Required for GitHub Pages 24/7 deployment
+  base: './',
   server: {
     host: true,
-    port: 3000
+    port: 5173,
+    strictPort: true,
   }
 })

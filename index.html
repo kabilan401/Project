@@ -1,23 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'></path><line x1='3' y1='6' x2='21' y2='6'></line><path d='M16 10a4 4 0 0 1-8 0'></path></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>CampusMart — Buy. Sell. Connect. Exclusive College Marketplace</title>
-    <meta name="description" content="CampusMart is the premier peer-to-peer college marketplace for students to buy and sell textbooks, electronics, hostel gear, calculators, cycles, and more securely." />
-    
-    <!-- Android & iOS Mobile Web App Tags -->
-    <meta name="theme-color" content="#4f46e5" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="manifest" href="/manifest.json" />
-
-    <!-- Google Fonts -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrepXpert - Student Placement & Practice Portal</title>
+    <!-- Google Fonts: Outfit & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Color Scheme & inline theme script to avoid FOUC -->
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      {
+        const savedTheme = localStorage.getItem("color-scheme") || "dark";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        document.documentElement.style.colorScheme = savedTheme;
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

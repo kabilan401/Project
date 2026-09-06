@@ -1,0 +1,11 @@
+/* App-specific local styles. Main styling is configured in index.css */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+}

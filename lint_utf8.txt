@@ -1,0 +1,302 @@
+﻿
+  ! eslint(no-unused-vars): Identifier 'Award' is imported but never used.
+   ,-[src/components/ProgressDashboard.jsx:2:10]
+ 1 | import React, { useState, useEffect } from "react";
+ 2 | import { Award, BrainCircuit, Code, UserCheck, Calendar, ShieldAlert, BarChart3, TrendingUp, BookOpen, RotateCcw } from "lucide-react";
+   :          ^^|^^
+   :            `-- 'Award' is imported here
+ 3 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'aptitudeQuestions' is imported but never used.
+   ,-[src/components/Aptitude.jsx:2:10]
+ 1 | import React, { useState, useEffect } from "react";
+ 2 | import { aptitudeQuestions } from "../data/questionsData";
+   :          ^^^^^^^^|^^^^^^^^
+   :                  `-- 'aptitudeQuestions' is imported here
+ 3 | import { BrainCircuit, Check, X, Award, RotateCcw, ChevronRight } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'loadNewQuestion'
+    ,-[src/components/Aptitude.jsx:25:6]
+ 21 |   useEffect(() => {
+ 22 |     loadNewQuestion();
+    :     ^^^^^^^|^^^^^^^
+    :            `-- useEffect uses `loadNewQuestion` here
+ 23 |     setSelectedOption(null);
+ 24 |     setIsAnswered(false);
+ 25 |   }, [selectedCategory]);
+    :      ^^^^^^^^^^^^^^^^^^
+ 26 | 
+    `----
+  help: Either include it or remove the dependency array.
+
+  ! eslint(no-unused-vars): Identifier 'CheckCircle2' is imported but never used.
+   ,-[src/components/Profile.jsx:2:65]
+ 1 | import React, { useState } from "react";
+ 2 | import { User, Shield, Briefcase, Award, UploadCloud, FileText, CheckCircle2, Trash2, Plus, X, Globe, Calendar, RefreshCw } from "lucide-react";
+   :                                                                 ^^^^^^|^^^^^
+   :                                                                       `-- 'CheckCircle2' is imported here
+ 3 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'Calendar' is imported but never used.
+   ,-[src/components/Profile.jsx:2:103]
+ 1 | import React, { useState } from "react";
+ 2 | import { User, Shield, Briefcase, Award, UploadCloud, FileText, CheckCircle2, Trash2, Plus, X, Globe, Calendar, RefreshCw } from "lucide-react";
+   :                                                                                                       ^^^^|^^^
+   :                                                                                                           `-- 'Calendar' is imported here
+ 3 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'companyProfiles' is imported but never used.
+   ,-[src/components/CompanyPrep.jsx:2:10]
+ 1 | import React, { useState } from "react";
+ 2 | import { companyProfiles } from "../data/questionsData";
+   :          ^^^^^^^|^^^^^^^
+   :                 `-- 'companyProfiles' is imported here
+ 3 | import { Briefcase, ArrowLeft, Target, Award, ListTodo, HelpCircle, Eye, RefreshCw } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable 'setCompanies' is declared but never used. Unused variables should start with a '_'.
+   ,-[src/components/CompanyPrep.jsx:6:21]
+ 5 | export default function CompanyPrep({ showToast }) {
+ 6 |   const [companies, setCompanies] = useState(() => {
+   :                     ^^^^^^|^^^^^
+   :                           `-- 'setCompanies' is declared here
+ 7 |     return JSON.parse(localStorage.getItem("prep_db_companies") || "[]");
+   `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'Award' is imported but never used.
+   ,-[src/components/AdminDashboard.jsx:3:35]
+ 2 | import {
+ 3 |   Users, HelpCircle, ShieldAlert, Award, FileText, Search,
+   :                                   ^^|^^
+   :                                     `-- 'Award' is imported here
+ 4 |   Trash2, Plus, X, ShieldCheck, Mail, Send, ChevronRight, Download
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'Send' is imported but never used.
+   ,-[src/components/AdminDashboard.jsx:4:39]
+ 3 |   Users, HelpCircle, ShieldAlert, Award, FileText, Search,
+ 4 |   Trash2, Plus, X, ShieldCheck, Mail, Send, ChevronRight, Download
+   :                                       ^^|^
+   :                                         `-- 'Send' is imported here
+ 5 | } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'ChevronRight' is imported but never used.
+   ,-[src/components/AdminDashboard.jsx:4:45]
+ 3 |   Users, HelpCircle, ShieldAlert, Award, FileText, Search,
+ 4 |   Trash2, Plus, X, ShieldCheck, Mail, Send, ChevronRight, Download
+   :                                             ^^^^^^|^^^^^
+   :                                                   `-- 'ChevronRight' is imported here
+ 5 | } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'loadDatabase'
+    ,-[src/components/AdminDashboard.jsx:41:6]
+ 39 |   useEffect(() => {
+ 40 |     loadDatabase();
+    :     ^^^^^^|^^^^^
+    :           `-- useEffect uses `loadDatabase` here
+ 41 |   }, [selectedPool, activeTab]);
+    :      ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 42 | 
+    `----
+  help: Either include it or remove the dependency array.
+
+  ! eslint(no-unused-vars): Identifier 'aptitudeQuestions' is imported but never used.
+   ,-[src/components/MockTest.jsx:2:10]
+ 1 | import React, { useState, useEffect, useRef } from "react";
+ 2 | import { aptitudeQuestions, codingQuestions } from "../data/questionsData";
+   :          ^^^^^^^^|^^^^^^^^
+   :                  `-- 'aptitudeQuestions' is imported here
+ 3 | import { AlertOctagon, Timer, Play, CheckCircle2, ChevronRight, ChevronLeft, RefreshCw, X, ShieldAlert, Award, RotateCcw } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'codingQuestions' is imported but never used.
+   ,-[src/components/MockTest.jsx:2:29]
+ 1 | import React, { useState, useEffect, useRef } from "react";
+ 2 | import { aptitudeQuestions, codingQuestions } from "../data/questionsData";
+   :                             ^^^^^^^|^^^^^^^
+   :                                    `-- 'codingQuestions' is imported here
+ 3 | import { AlertOctagon, Timer, Play, CheckCircle2, ChevronRight, ChevronLeft, RefreshCw, X, ShieldAlert, Award, RotateCcw } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'CheckCircle2' is imported but never used.
+   ,-[src/components/MockTest.jsx:3:37]
+ 2 | import { aptitudeQuestions, codingQuestions } from "../data/questionsData";
+ 3 | import { AlertOctagon, Timer, Play, CheckCircle2, ChevronRight, ChevronLeft, RefreshCw, X, ShieldAlert, Award, RotateCcw } from "lucide-react";
+   :                                     ^^^^^^|^^^^^
+   :                                           `-- 'CheckCircle2' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'X' is imported but never used.
+   ,-[src/components/MockTest.jsx:3:89]
+ 2 | import { aptitudeQuestions, codingQuestions } from "../data/questionsData";
+ 3 | import { AlertOctagon, Timer, Play, CheckCircle2, ChevronRight, ChevronLeft, RefreshCw, X, ShieldAlert, Award, RotateCcw } from "lucide-react";
+   :                                                                                         |
+   :                                                                                         `-- 'X' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'submitTest'
+    ,-[src/components/MockTest.jsx:85:6]
+ 76 |             clearInterval(timerRef.current);
+ 77 |             submitTest(true); // Auto-submit when timer ends
+    :             ^^^^^|^^^^
+    :                  `-- useEffect uses `submitTest` here
+ 78 |             return 0;
+ 79 |           }
+ 80 |           return prev - 1;
+ 81 |         });
+ 82 |       }, 1000);
+ 83 |     }
+ 84 |     return () => clearInterval(timerRef.current);
+ 85 |   }, [testState]);
+    :      ^^^^^^^^^^^
+ 86 | 
+    `----
+  help: Either include it or remove the dependency array.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'triggerViolation'
+     ,-[src/components/MockTest.jsx:108:6]
+  90 |       if (testState === "running" && document.hidden) {
+  91 |         triggerViolation("Tab Switching / Minimizing Browser");
+     :         ^^^^^^^^|^^^^^^^
+     :                 `-- useEffect uses `triggerViolation` here
+  92 |       }
+  93 |     };
+  94 | 
+  95 |     const handleWindowBlur = () => {
+  96 |       if (testState === "running") {
+  97 |         triggerViolation("Leaving Exam Screen Focus");
+  98 |       }
+  99 |     };
+ 100 | 
+ 101 |     document.addEventListener("visibilitychange", handleVisibilityChange);
+ 102 |     window.addEventListener("blur", handleWindowBlur);
+ 103 | 
+ 104 |     return () => {
+ 105 |       document.removeEventListener("visibilitychange", handleVisibilityChange);
+ 106 |       window.removeEventListener("blur", handleWindowBlur);
+ 107 |     };
+ 108 |   }, [testState]);
+     :      ^^^^^^^^^^^
+ 109 | 
+     `----
+  help: Either include it or remove the dependency array.
+
+  ! eslint(no-unused-vars): Identifier 'codingQuestions' is imported but never used.
+   ,-[src/components/CodingPractice.jsx:2:10]
+ 1 | import React, { useState, useEffect } from "react";
+ 2 | import { codingQuestions } from "../data/questionsData";
+   :          ^^^^^^^|^^^^^^^
+   :                 `-- 'codingQuestions' is imported here
+ 3 | import { Terminal, Play, CheckCircle2, AlertTriangle, Code, RotateCcw, HelpCircle } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'CheckCircle2' is imported but never used.
+   ,-[src/components/CodingPractice.jsx:3:26]
+ 2 | import { codingQuestions } from "../data/questionsData";
+ 3 | import { Terminal, Play, CheckCircle2, AlertTriangle, Code, RotateCcw, HelpCircle } from "lucide-react";
+   :                          ^^^^^^|^^^^^
+   :                                `-- 'CheckCircle2' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'AlertTriangle' is imported but never used.
+   ,-[src/components/CodingPractice.jsx:3:40]
+ 2 | import { codingQuestions } from "../data/questionsData";
+ 3 | import { Terminal, Play, CheckCircle2, AlertTriangle, Code, RotateCcw, HelpCircle } from "lucide-react";
+   :                                        ^^^^^^|^^^^^^
+   :                                              `-- 'AlertTriangle' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'HelpCircle' is imported but never used.
+   ,-[src/components/CodingPractice.jsx:3:72]
+ 2 | import { codingQuestions } from "../data/questionsData";
+ 3 | import { Terminal, Play, CheckCircle2, AlertTriangle, Code, RotateCcw, HelpCircle } from "lucide-react";
+   :                                                                        ^^^^^|^^^^
+   :                                                                             `-- 'HelpCircle' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable 'setChallenges' is declared but never used. Unused variables should start with a '_'.
+   ,-[src/components/CodingPractice.jsx:6:22]
+ 5 | export default function CodingPractice({ showToast }) {
+ 6 |   const [challenges, setChallenges] = useState(() => {
+   :                      ^^^^^^|^^^^^^
+   :                            `-- 'setChallenges' is declared here
+ 7 |     return JSON.parse(localStorage.getItem("prep_db_coding") || "[]");
+   `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable 'logs' is declared but never used. Unused variables should start with a '_'.
+    ,-[src/components/CodingPractice.jsx:50:13]
+ 49 |       const results = [];
+ 50 |       const logs = [];
+    :             ^^|^
+    :               `-- 'logs' is declared here
+ 51 | 
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'interviewQuestions' is imported but never used.
+   ,-[src/components/InterviewPrep.jsx:2:10]
+ 1 | import React, { useState, useEffect } from "react";
+ 2 | import { interviewQuestions } from "../data/questionsData";
+   :          ^^^^^^^^^|^^^^^^^^
+   :                   `-- 'interviewQuestions' is imported here
+ 3 | import { MessageSquareCode, Award, Send, RefreshCw, ChevronRight, HelpCircle, Eye } from "lucide-react";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'ChevronRight' is imported but never used.
+   ,-[src/components/InterviewPrep.jsx:3:53]
+ 2 | import { interviewQuestions } from "../data/questionsData";
+ 3 | import { MessageSquareCode, Award, Send, RefreshCw, ChevronRight, HelpCircle, Eye } from "lucide-react";
+   :                                                     ^^^^^^|^^^^^
+   :                                                           `-- 'ChevronRight' is imported here
+ 4 | 
+   `----
+  help: Consider removing this import.
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has a missing dependency: 'loadNewQuestion'
+    ,-[src/components/InterviewPrep.jsx:24:6]
+ 19 |   useEffect(() => {
+ 20 |     loadNewQuestion();
+    :     ^^^^^^^|^^^^^^^
+    :            `-- useEffect uses `loadNewQuestion` here
+ 21 |     setIsFlipped(false);
+ 22 |     setUserAnswer("");
+ 23 |     setEvaluationFeedback(null);
+ 24 |   }, [selectedCategory]);
+    :      ^^^^^^^^^^^^^^^^^^
+ 25 | 
+    `----
+  help: Either include it or remove the dependency array.
+
+Found 26 warnings and 0 errors.
+Finished in 39ms on 14 files with 92 rules using 18 threads.
+

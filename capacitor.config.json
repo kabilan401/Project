@@ -1,0 +1,8 @@
+{
+  "appId": "com.prepxpert.app",
+  "appName": "PrepXpert",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
