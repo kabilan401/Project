@@ -20,9 +20,20 @@ import "./App.css";
 
 export default function App() {
   // Theme State (Default: Light Mode)
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("color-scheme") || "light";
+  const [theme, setTheme] = useState("light");
+
+  // Responsive Mobile View Detector (< 1024px)
+  const [isMobileView, setIsMobileView] = useState(() => {
+    return typeof window !== "undefined" ? window.innerWidth < 1024 : false;
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Mobile Menu Drawer State
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -39,11 +50,11 @@ export default function App() {
   // Toasts Alert State
   const [toasts, setToasts] = useState([]);
 
-  // Sync theme changes with document elements
+  // Sync Light theme changes with document elements unconditionally
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.colorScheme = theme;
-    localStorage.setItem("color-scheme", theme);
+    document.documentElement.setAttribute("data-theme", "light");
+    document.documentElement.style.colorScheme = "light";
+    localStorage.setItem("color-scheme", "light");
   }, [theme]);
 
   // Handle Tab Change & Close Mobile Drawer
@@ -296,67 +307,69 @@ export default function App() {
             </>
           )}
 
-          {/* DESKTOP GLASS SIDEBAR */}
-          <aside className="glass-panel desktop-sidebar">
-            <div style={styles.sidebarBrand}>
-              <GraduationCap size={28} color="var(--brand-primary)" />
-              <h2 style={styles.brandText}>PrepXpert</h2>
-            </div>
-
-            {/* Profile Overview segment in Sidebar */}
-            <div style={styles.userCard}>
-              <div style={styles.userAvatar}>
-                {user.name.charAt(0).toUpperCase()}
+          {/* DESKTOP GLASS SIDEBAR (Rendered only on Desktop >= 1024px) */}
+          {!isMobileView && (
+            <aside className="glass-panel desktop-sidebar">
+              <div style={styles.sidebarBrand}>
+                <GraduationCap size={28} color="var(--brand-primary)" />
+                <h2 style={styles.brandText}>PrepXpert</h2>
               </div>
-              <div style={styles.userInfo}>
-                <p style={styles.userName}>{user.name}</p>
-                <p style={styles.userDept}>{user.department}</p>
+
+              {/* Profile Overview segment in Sidebar */}
+              <div style={styles.userCard}>
+                <div style={styles.userAvatar}>
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div style={styles.userInfo}>
+                  <p style={styles.userName}>{user.name}</p>
+                  <p style={styles.userDept}>{user.department}</p>
+                </div>
               </div>
-            </div>
 
-            {/* Sidebar Navigation */}
-            <nav style={styles.navMenu}>
-              {navItems.map(item => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-                return (
-                  <button 
-                    key={item.id}
-                    style={{
-                      ...styles.navItem,
-                      background: isActive ? "var(--brand-gradient)" : "transparent",
-                      color: isActive ? "#ffffff" : "var(--text-secondary)"
-                    }}
-                    onClick={() => handleSelectTab(item.id)}
-                  >
-                    <Icon size={18} /> {item.label}
-                  </button>
-                );
-              })}
-            </nav>
+              {/* Sidebar Navigation */}
+              <nav style={styles.navMenu}>
+                {navItems.map(item => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button 
+                      key={item.id}
+                      style={{
+                        ...styles.navItem,
+                        background: isActive ? "var(--brand-gradient)" : "transparent",
+                        color: isActive ? "#ffffff" : "var(--text-secondary)"
+                      }}
+                      onClick={() => handleSelectTab(item.id)}
+                    >
+                      <Icon size={18} /> {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
 
-            {/* Sidebar bottom settings / logout */}
-            <div style={styles.sidebarFooter}>
-              <button 
-                className="btn btn-secondary" 
-                style={styles.actionBtn}
-                onClick={toggleTheme}
-                title="Toggle Light/Dark Theme"
-              >
-                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-                <span>{theme === "dark" ? "Light Theme" : "Dark Theme"}</span>
-              </button>
+              {/* Sidebar bottom settings / logout */}
+              <div style={styles.sidebarFooter}>
+                <button 
+                  className="btn btn-secondary" 
+                  style={styles.actionBtn}
+                  onClick={toggleTheme}
+                  title="Toggle Light/Dark Theme"
+                >
+                  {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                  <span>{theme === "dark" ? "Light Theme" : "Dark Theme"}</span>
+                </button>
 
-              <button 
-                className="btn btn-secondary"
-                style={{ ...styles.actionBtn, borderColor: "rgba(244, 63, 94, 0.25)" }}
-                onClick={handleLogout}
-              >
-                <LogOut size={16} color="var(--accent-rose)" />
-                <span style={{ color: "var(--accent-rose)" }}>Log Out</span>
-              </button>
-            </div>
-          </aside>
+                <button 
+                  className="btn btn-secondary"
+                  style={{ ...styles.actionBtn, borderColor: "rgba(244, 63, 94, 0.25)" }}
+                  onClick={handleLogout}
+                >
+                  <LogOut size={16} color="var(--accent-rose)" />
+                  <span style={{ color: "var(--accent-rose)" }}>Log Out</span>
+                </button>
+              </div>
+            </aside>
+          )}
 
           {/* MAIN PAGE VIEW */}
           <main className="main-content">

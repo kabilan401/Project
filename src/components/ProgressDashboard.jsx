@@ -710,7 +710,9 @@ const styles = {
     transition: "all 0.2s ease"
   },
   taskText: {
-    textAlign: "left"
+    textAlign: "left",
+    flex: 1,
+    minWidth: 0
   },
   taskLabel: {
     fontSize: "0.92rem",

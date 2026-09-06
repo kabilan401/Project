@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>PrepXpert - Student Placement & Practice Portal</title>
     <!-- Google Fonts: Outfit & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Color Scheme & inline theme script to avoid FOUC -->
-    <meta name="color-scheme" content="dark light" />
+    <!-- Color Scheme & inline theme script: Unconditional Light Mode -->
+    <meta name="color-scheme" content="light" />
     <script>
       {
-        const savedTheme = localStorage.getItem("color-scheme") || "dark";
-        document.documentElement.setAttribute("data-theme", savedTheme);
-        document.documentElement.style.colorScheme = savedTheme;
+        localStorage.setItem("color-scheme", "light");
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.style.colorScheme = "light";
       }
     </script>
   </head>
