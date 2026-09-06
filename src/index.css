@@ -4,7 +4,46 @@
 
 /* Theme Definitions */
 :root {
-  /* Default to Dark Mode */
+  /* Default to Light Mode */
+  --bg-primary: #f6f5fa;
+  --bg-secondary: rgba(255, 255, 255, 0.85);
+  --bg-accent: rgba(240, 237, 250, 0.75);
+  --bg-surface: #ffffff;
+  --text-primary: #19142b;
+  --text-secondary: #665f80;
+  --border-color: rgba(109, 40, 217, 0.12);
+  --border-focus: #7c3aed;
+  
+  --brand-primary: #7c3aed;
+  --brand-secondary: #dc2626;
+  --brand-accent: #a78bfa;
+  --brand-gradient: linear-gradient(135deg, #6d28d9 0%, #c026d3 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  
+  --shadow-main: 0 8px 32px 0 rgba(109, 40, 217, 0.08);
+  --shadow-sm: 0 4px 12px 0 rgba(109, 40, 217, 0.04);
+  --shadow-hover: 0 12px 40px 0 rgba(109, 40, 217, 0.16);
+  
+  --glass-blur: blur(14px) saturate(180%);
+  --glass-background: rgba(255, 255, 255, 0.75);
+  --glass-border: 1px solid rgba(109, 40, 217, 0.1);
+  
+  --accent-emerald: #059669;
+  --accent-rose: #e11d48;
+  --accent-amber: #d97706;
+  
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  --scrollbar-thumb: rgba(109, 40, 217, 0.3);
+  --scrollbar-track: rgba(246, 245, 250, 0.8);
+  
+  color-scheme: light;
+  accent-color: var(--brand-primary);
+}
+
+/* Dark Mode Overrides */
+html[data-theme="dark"] {
   --bg-primary: #0a0816;
   --bg-secondary: rgba(17, 13, 33, 0.7);
   --bg-accent: rgba(30, 24, 57, 0.45);
@@ -15,7 +54,7 @@
   --border-focus: #9061f9;
   
   --brand-primary: #9061f9;
-  --brand-secondary: #e02424; /* Crimson accent */
+  --brand-secondary: #e02424;
   --brand-accent: #c084fc;
   --brand-gradient: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
   --brand-gradient-hover: linear-gradient(135deg, #8b5cf6 0%, #f472b6 100%);
@@ -32,49 +71,10 @@
   --accent-rose: #f43f5e;
   --accent-amber: #f59e0b;
   
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  
   --scrollbar-thumb: rgba(144, 97, 249, 0.4);
   --scrollbar-track: rgba(10, 8, 22, 0.8);
   
   color-scheme: dark;
-  accent-color: var(--brand-primary);
-}
-
-/* Light Mode Overrides */
-html[data-theme="light"] {
-  --bg-primary: #f6f5fa;
-  --bg-secondary: rgba(255, 255, 255, 0.75);
-  --bg-accent: rgba(240, 237, 250, 0.7);
-  --bg-surface: #ffffff;
-  --text-primary: #19142b;
-  --text-secondary: #665f80;
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-focus: #7c3aed;
-  
-  --brand-primary: #7c3aed;
-  --brand-secondary: #dc2626;
-  --brand-accent: #a78bfa;
-  --brand-gradient: linear-gradient(135deg, #6d28d9 0%, #c026d3 100%);
-  --brand-gradient-hover: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
-  
-  --shadow-main: 0 8px 32px 0 rgba(109, 40, 217, 0.08);
-  --shadow-sm: 0 4px 12px 0 rgba(109, 40, 217, 0.04);
-  --shadow-hover: 0 12px 40px 0 rgba(109, 40, 217, 0.16);
-  
-  --glass-blur: blur(14px) saturate(180%);
-  --glass-background: rgba(255, 255, 255, 0.65);
-  --glass-border: 1px solid rgba(109, 40, 217, 0.08);
-  
-  --accent-emerald: #059669;
-  --accent-rose: #e11d48;
-  --accent-amber: #d97706;
-  
-  --scrollbar-thumb: rgba(109, 40, 217, 0.3);
-  --scrollbar-track: rgba(246, 245, 250, 0.8);
-  
-  color-scheme: light;
 }
 
 /* Base resets */
@@ -545,5 +545,129 @@ html[data-theme="light"] .card-face-back {
   border-radius: 2px;
   animation: soundWaveHeight 0.8s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   Responsive App Layout & Mobile Navigation Classes
+   ========================================================================== */
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.desktop-sidebar {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  position: fixed;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 900;
+}
+
+.main-content {
+  margin-left: 320px;
+  padding: 20px 40px 40px 0;
+  flex-grow: 1;
+  width: calc(100% - 320px);
+  transition: all 0.3s ease;
+}
+
+.mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 16px;
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-border);
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-drawer-overlay {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 999;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  max-height: calc(100vh - 64px);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-main);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.25s ease forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 1023px) {
+  .desktop-sidebar {
+    display: none !important;
+  }
+
+  .mobile-header {
+    display: flex !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .dashboard-container {
+    flex-direction: column !important;
+  }
+
+  /* Responsive Grids on Mobile */
+  .overview-grid,
+  .responsive-grid,
+  .grid-2col,
+  .grid-3col {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .interview-card-container {
+    height: auto !important;
+    min-height: 420px !important;
+  }
+
+  .card-face {
+    padding: 16px !important;
+  }
+}
+
 
 

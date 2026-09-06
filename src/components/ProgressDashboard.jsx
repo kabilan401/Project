@@ -227,7 +227,7 @@ export default function ProgressDashboard({ showToast }) {
       </div>
 
       {/* SCOREOVERVIEW GRID */}
-      <div style={styles.overviewGrid}>
+      <div style={styles.overviewGrid} className="overview-grid">
         
         {/* RADIAL CHART RADIAL PROGRESS WHEEL */}
         <div className="glass-panel" style={styles.radialCard}>

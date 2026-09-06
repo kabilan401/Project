@@ -13,15 +13,19 @@ import AIEnglishAssistant from "./components/AIEnglishAssistant";
 import { initializeDatabase } from "./data/questionsData";
 import { 
   GraduationCap, User, BrainCircuit, Code, ClipboardList, MessageSquareCode, 
-  Sun, Moon, LogOut, ShieldAlert, TrendingUp, Briefcase, Bell, Languages
+  Sun, Moon, LogOut, ShieldAlert, TrendingUp, Briefcase, Bell, Languages,
+  Menu, X
 } from "lucide-react";
 import "./App.css";
 
 export default function App() {
-  // Theme State
+  // Theme State (Default: Light Mode)
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("color-scheme") || "dark";
+    return localStorage.getItem("color-scheme") || "light";
   });
+
+  // Mobile Menu Drawer State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Auth State
   const [user, setUser] = useState(() => {
@@ -41,6 +45,12 @@ export default function App() {
     document.documentElement.style.colorScheme = theme;
     localStorage.setItem("color-scheme", theme);
   }, [theme]);
+
+  // Handle Tab Change & Close Mobile Drawer
+  const handleSelectTab = (tabId) => {
+    setActiveTab(tabId);
+    setIsMobileMenuOpen(false);
+  };
 
   // Initialize localStorage dynamic databases
   useEffect(() => {
@@ -126,6 +136,18 @@ export default function App() {
     }
   };
 
+  const navItems = [
+    { id: "progress", label: "Progress & Scores", icon: TrendingUp },
+    { id: "profile", label: "Profile Workspace", icon: User },
+    { id: "aptitude", label: "Aptitude Arena", icon: BrainCircuit },
+    { id: "coding", label: "Coding Arena", icon: Code },
+    { id: "mock-test", label: "Placement Mock Test", icon: ClipboardList },
+    { id: "interview", label: "Interview Prep Q&A", icon: MessageSquareCode },
+    { id: "english-assistant", label: "AI English Assistant", icon: Languages },
+    { id: "company-prep", label: "Company Prep Stepper", icon: Briefcase },
+    { id: "notifications", label: "Placement Jobs", icon: Bell }
+  ];
+
   // Helper render for selected tab
   const renderTabContent = () => {
     switch (activeTab) {
@@ -171,8 +193,8 @@ export default function App() {
         </div>
       ) : user.role === "admin" ? (
         /* Admin Mode: Dashboard without student sidebar */
-        <div style={styles.dashboardContainer}>
-          <div style={{ flex: 1, padding: "20px 40px" }}>
+        <div className="dashboard-container">
+          <div style={{ flex: 1, padding: "20px" }}>
             <div style={styles.adminHeaderNav}>
               <h2 style={{ background: "var(--brand-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 800, fontSize: "1.6rem" }}>
                 PrepXpert Admin Console
@@ -195,10 +217,87 @@ export default function App() {
         </div>
       ) : (
         /* Logged In Mode: Sidebar + Main Layout */
-        <div style={styles.dashboardContainer}>
+        <div className="dashboard-container">
           
-          {/* GLASS SIDEBAR */}
-          <aside className="glass-panel" style={styles.sidebar}>
+          {/* MOBILE STICKY TOP HEADER */}
+          <header className="mobile-header">
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <GraduationCap size={24} color="var(--brand-primary)" />
+              <h2 style={{ fontSize: "1.15rem", fontWeight: 800, background: "var(--brand-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                PrepXpert
+              </h2>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <button 
+                className="btn btn-secondary" 
+                onClick={toggleTheme} 
+                style={{ padding: "6px 10px", borderRadius: "8px" }}
+                title="Toggle Light/Dark Mode"
+              >
+                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+              <button 
+                className="btn btn-primary" 
+                onClick={() => setIsMobileMenuOpen(prev => !prev)}
+                style={{ padding: "6px 12px", borderRadius: "8px" }}
+                aria-label="Toggle Mobile Menu"
+              >
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
+          </header>
+
+          {/* MOBILE NAVIGATION DRAWER OVERLAY */}
+          {isMobileMenuOpen && (
+            <>
+              <div className="mobile-drawer-overlay" style={{ display: "block" }} onClick={() => setIsMobileMenuOpen(false)} />
+              <div className="mobile-drawer">
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "8px 0 12px 0", borderBottom: "1px solid var(--border-color)" }}>
+                  <div style={styles.userAvatar}>{user.name.charAt(0).toUpperCase()}</div>
+                  <div style={styles.userInfo}>
+                    <p style={styles.userName}>{user.name}</p>
+                    <p style={styles.userDept}>{user.department}</p>
+                  </div>
+                </div>
+
+                <nav style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {navItems.map(item => {
+                    const Icon = item.icon;
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => handleSelectTab(item.id)}
+                        style={{
+                          ...styles.navItem,
+                          background: isActive ? "var(--brand-gradient)" : "transparent",
+                          color: isActive ? "#ffffff" : "var(--text-primary)",
+                          padding: "10px 14px",
+                          borderRadius: "8px"
+                        }}
+                      >
+                        <Icon size={18} /> {item.label}
+                      </button>
+                    );
+                  })}
+                </nav>
+
+                <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid var(--border-color)", display: "flex", gap: "10px" }}>
+                  <button 
+                    className="btn btn-secondary"
+                    style={{ flex: 1, borderColor: "rgba(244, 63, 94, 0.25)", justifyContent: "center" }}
+                    onClick={handleLogout}
+                  >
+                    <LogOut size={16} color="var(--accent-rose)" />
+                    <span style={{ color: "var(--accent-rose)" }}>Log Out</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* DESKTOP GLASS SIDEBAR */}
+          <aside className="glass-panel desktop-sidebar">
             <div style={styles.sidebarBrand}>
               <GraduationCap size={28} color="var(--brand-primary)" />
               <h2 style={styles.brandText}>PrepXpert</h2>
@@ -217,104 +316,23 @@ export default function App() {
 
             {/* Sidebar Navigation */}
             <nav style={styles.navMenu}>
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "progress" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "progress" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("progress")}
-              >
-                <TrendingUp size={18} /> Progress & Scores
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "profile" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "profile" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("profile")}
-              >
-                <User size={18} /> Profile Workspace
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "aptitude" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "aptitude" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("aptitude")}
-              >
-                <BrainCircuit size={18} /> Aptitude Arena
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "coding" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "coding" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("coding")}
-              >
-                <Code size={18} /> Coding Arena
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "mock-test" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "mock-test" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("mock-test")}
-              >
-                <ClipboardList size={18} /> Placement Mock Test
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "interview" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "interview" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("interview")}
-              >
-                <MessageSquareCode size={18} /> Interview Prep Q&A
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "english-assistant" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "english-assistant" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("english-assistant")}
-              >
-                <Languages size={18} /> AI English Assistant
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "company-prep" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "company-prep" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("company-prep")}
-              >
-                <Briefcase size={18} /> Company Prep Stepper
-              </button>
-
-              <button 
-                style={{
-                  ...styles.navItem,
-                  background: activeTab === "notifications" ? "var(--brand-gradient)" : "transparent",
-                  color: activeTab === "notifications" ? "#ffffff" : "var(--text-secondary)"
-                }}
-                onClick={() => setActiveTab("notifications")}
-              >
-                <Bell size={18} /> Placement Jobs
-              </button>
+              {navItems.map(item => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <button 
+                    key={item.id}
+                    style={{
+                      ...styles.navItem,
+                      background: isActive ? "var(--brand-gradient)" : "transparent",
+                      color: isActive ? "#ffffff" : "var(--text-secondary)"
+                    }}
+                    onClick={() => handleSelectTab(item.id)}
+                  >
+                    <Icon size={18} /> {item.label}
+                  </button>
+                );
+              })}
             </nav>
 
             {/* Sidebar bottom settings / logout */}
@@ -341,7 +359,7 @@ export default function App() {
           </aside>
 
           {/* MAIN PAGE VIEW */}
-          <main style={styles.mainContent}>
+          <main className="main-content">
             {renderTabContent()}
           </main>
 
